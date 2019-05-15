@@ -1,4 +1,5 @@
 ﻿using System;
+using LightInject;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,7 +12,9 @@ namespace TeamTimer
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            var container = new ServiceContainer(new ContainerOptions { EnablePropertyInjection = false });
+            container.RegisterFrom<CompositionRoot>();
+            MainPage = container.GetInstance<MainPage>();
         }
 
         protected override void OnStart()
@@ -27,6 +30,14 @@ namespace TeamTimer
         protected override void OnResume()
         {
             // Handle when your app resumes
+        }
+    }
+
+    public class CompositionRoot : ICompositionRoot
+    {
+        public void Compose(IServiceRegistry serviceRegistry)
+        {
+            serviceRegistry.Register<MainPage>();
         }
     }
 }

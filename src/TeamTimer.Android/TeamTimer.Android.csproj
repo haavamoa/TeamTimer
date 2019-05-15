@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -39,35 +39,41 @@
         <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="Mono.Android"/>
-        <Reference Include="System"/>
-        <Reference Include="System.Core"/>
-        <Reference Include="System.Xml.Linq"/>
-        <Reference Include="System.Xml"/>
+        <Reference Include="Mono.Android" />
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Xml.Linq" />
+        <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Xamarin.Forms" Version="3.3.0.912540"/>
-        <PackageReference Include="Xamarin.Android.Support.Design" Version="27.0.2.1"/>
-        <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="27.0.2.1"/>
-        <PackageReference Include="Xamarin.Android.Support.v4" Version="27.0.2.1"/>
-        <PackageReference Include="Xamarin.Android.Support.v7.CardView" Version="27.0.2.1"/>
-        <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="27.0.2.1"/>
+        <PackageReference Include="Xamarin.Forms" Version="3.3.0.912540" />
+        <PackageReference Include="Xamarin.Android.Support.Design" Version="27.0.2.1" />
+        <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="27.0.2.1" />
+        <PackageReference Include="Xamarin.Android.Support.v4" Version="27.0.2.1" />
+        <PackageReference Include="Xamarin.Android.Support.v7.CardView" Version="27.0.2.1" />
+        <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="27.0.2.1" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="MainActivity.cs"/>
-        <Compile Include="Resources\Resource.Designer.cs"/>
-        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="MainActivity.cs" />
+        <Compile Include="Resources\Resource.Designer.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
-        <None Include="Resources\AboutResources.txt"/>
-        <None Include="Assets\AboutAssets.txt"/>
-        <None Include="Properties\AndroidManifest.xml"/>
+        <None Include="Resources\AboutResources.txt" />
+        <None Include="Assets\AboutAssets.txt" />
+        <None Include="Properties\AndroidManifest.xml" />
     </ItemGroup>
     <ItemGroup>
-        <AndroidResource Include="Resources\layout\Tabbar.axml"/>
-        <AndroidResource Include="Resources\layout\Toolbar.axml"/>
-        <AndroidResource Include="Resources\values\styles.xml"/>
-        <AndroidResource Include="Resources\values\colors.xml"/>
+        <AndroidResource Include="Resources\drawable-hdpi\team_timer.png" />
+        <AndroidResource Include="Resources\drawable-mdpi\team_timer.png" />
+        <AndroidResource Include="Resources\drawable-xhdpi\team_timer.png" />
+        <AndroidResource Include="Resources\drawable-xxhdpi\team_timer.png" />
+        <AndroidResource Include="Resources\drawable-xxxhdpi\team_timer.png" />
+        <AndroidResource Include="Resources\layout\Tabbar.axml" />
+        <AndroidResource Include="Resources\layout\Toolbar.axml" />
+        <AndroidResource Include="Resources\values\styles.xml" />
+        <AndroidResource Include="Resources\values\colors.xml" />
+        <AndroidResource Include="Resources\web_hi_res_512.png" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\TeamTimer\TeamTimer.csproj">
@@ -75,5 +81,5 @@
             <Name>TeamTimer</Name>
         </ProjectReference>
     </ItemGroup>
-    <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets"/>
+    <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

@@ -2,6 +2,7 @@ using LightInject;
 using TeamTimer.ViewModels;
 using TeamTimer.ViewModels.Interfaces;
 using TeamTimer.Views;
+using Xamarin.Forms;
 
 namespace TeamTimer
 {
@@ -13,6 +14,12 @@ namespace TeamTimer
             RegisterViews(serviceRegistry);
         }
 
+        private INavigation CreateSingletonNavigation(IServiceFactory container)
+        {
+            var navigation = container.GetInstance<MainPage>().Navigation;
+            return navigation;
+        }
+
         private void RegisterViews(IServiceRegistry serviceRegistry)
         {
             serviceRegistry.Register<MainPage>();
@@ -21,6 +28,7 @@ namespace TeamTimer
         private void RegisterViewModels(IServiceRegistry serviceRegistry)
         {
             serviceRegistry.Register<IMainViewModel, MainViewModel>();
+            serviceRegistry.Register<IMatchViewModel, MatchViewModel>();
         }
     }
 }

@@ -7,15 +7,24 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:Interfaces="clr-namespace:TeamTimer.ViewModels.Interfaces;assembly=TeamTimer"
+             Title="Team"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Interfaces:IMainViewModel}" >
-
-    <StackLayout>
-        <!-- Place new controls here -->
-        <Label Text="Welcome to TeamTimer"
-               FontSize="32"
-               HorizontalOptions="Center"
-               VerticalOptions="CenterAndExpand" />
+    <StackLayout VerticalOptions="CenterAndExpand"
+                 HorizontalOptions="CenterAndExpand" >
+        <Button Command="{Binding AddPlayerCommand}"
+                Text="Add new player" />
+        <ListView ItemsSource="{Binding Players}"
+                  SelectedItem="{Binding SelectedPlayer}" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Entry Text="{Binding Name}" />
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button Command="{Binding SaveTeamCommand}"
+                Text="Save team" />
     </StackLayout>
-
 </ContentPage>

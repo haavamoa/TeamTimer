@@ -15,7 +15,7 @@ namespace TeamTimer
 
             var container = new ServiceContainer(new ContainerOptions { EnablePropertyInjection = false });
             container.RegisterFrom<CompositionRoot>();
-            MainPage = container.GetInstance<MainPage>();
+            MainPage = new NavigationPage(container.GetInstance<MainPage>());
         }
 
         protected override void OnStart()

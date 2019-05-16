@@ -1,4 +1,6 @@
-﻿using TeamTimer.ViewModels.Interfaces;
+﻿using System;
+using TeamTimer.ViewModels.Interfaces;
+using TeamTimer.ViewModels.Interfaces.ViewModels;
 using Xamarin.Forms;
 
 namespace TeamTimer.Views
@@ -12,7 +14,10 @@ namespace TeamTimer.Views
             mainViewModel.Navigation = Navigation;
             BindingContext = mainViewModel;
         }
-        
-        
+
+        private void AddPlayerButton_Clicked(object sender, EventArgs e)
+        {
+            NewPlayerEntry.Focus();
+        }
     }
 }

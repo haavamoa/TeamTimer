@@ -1,6 +1,7 @@
 using LightInject;
 using TeamTimer.ViewModels;
 using TeamTimer.ViewModels.Interfaces;
+using TeamTimer.ViewModels.Interfaces.ViewModels;
 using TeamTimer.Views;
 using Xamarin.Forms;
 

@@ -7,23 +7,53 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:Interfaces="clr-namespace:TeamTimer.ViewModels.Interfaces;assembly=TeamTimer"
+             xmlns:ViewModels="clr-namespace:TeamTimer.ViewModels.Interfaces.ViewModels;assembly=TeamTimer"
              Title="Team"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance Interfaces:IMainViewModel}" >
+             d:DataContext="{d:DesignInstance ViewModels:IMainViewModel}" >
     <StackLayout VerticalOptions="CenterAndExpand"
                  HorizontalOptions="CenterAndExpand" >
-        <Button Command="{Binding AddPlayerCommand}"
-                Text="Add new player" />
-        <ListView ItemsSource="{Binding Players}"
-                  SelectedItem="{Binding SelectedPlayer}" >
+        <!-- Add new player Grid-->
+        <Frame BorderColor="#232F34">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Entry x:Name="NewPlayerEntry"
+                       Grid.Column="0"
+                       Text="{Binding NewPlayerName}"
+                       Placeholder="Player name, use ';' to add more than one" />
+                <Button Grid.Column="1"
+                        Command="{Binding AddPlayerCommand}"
+                        Text="Add player"
+                        Clicked="AddPlayerButton_Clicked" />
+            </Grid>
+        </Frame>
+        <!-- List of players -->
+        <ListView ItemsSource="{Binding Players}" >
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Entry Text="{Binding Name}" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Entry Grid.Column="0"
+                                   Text="{Binding Name}"
+                                   Margin="10,0,0,0"
+                                   />
+                            <Button Grid.Column="1"
+                                    Text="Delete"
+                                    Command="{Binding DeletePlayerCommand}"
+                                    TextColor="IndianRed" />
+                        </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <!-- Save team -->
         <Button Command="{Binding SaveTeamCommand}"
                 Text="Save team" />
     </StackLayout>

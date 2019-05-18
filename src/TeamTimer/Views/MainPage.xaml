@@ -11,10 +11,8 @@
              mc:Ignorable="dblend"
              dblend:DataContext="{dblend:DesignInstance ViewModels:IMainViewModel}"
              xmlns:ViewModels="clr-namespace:TeamTimer.ViewModels.Interfaces.ViewModels;assembly=TeamTimer"
-             
              Title="Team"
-             Visual="Material"
-             >
+             Visual="Material">
     <Grid Padding="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -27,8 +25,8 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Entry Grid.Column="0"
-                   x:Name="NewPlayerEntry"
+            <Entry x:Name="NewPlayerEntry"
+                   Grid.Column="0"
                    Text="{Binding NewPlayerName}"
                    Placeholder="Player name" />
             <Button Grid.Column="1"
@@ -53,8 +51,8 @@
                                    Margin="10,0,0,0" />
                             <Button Grid.Column="1"
                                     Command="{Binding DeletePlayerCommand}"
-                                    Text="Remove" 
-                                    Style="{StaticResource buttonStyle}"/>
+                                    Text="Remove"
+                                    Style="{StaticResource buttonStyle}" />
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

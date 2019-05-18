@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
 namespace TeamTimer.ViewModels.Base
 {
@@ -21,13 +24,15 @@ namespace TeamTimer.ViewModels.Base
         /// <param name="validateValue">Validates value.</param>
         /// <param name="propertyName">Property name.</param>
         /// <param name="onChanged">On changed.</param>
+        /// <param name="commandsToChangeCanExecute">A list of commands to run the <see cref="Command.ChangeCanExecute"/> on</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
         protected virtual bool SetProperty<T>(
             ref T backingStore,
             T value,
             [CallerMemberName] string propertyName = "",
             Action onChanged = null,
-            Func<T, T, bool> validateValue = null)
+            Func<T, T, bool> validateValue = null,
+            params Command[] commandsToChangeCanExecute)
         {
             //if value didn't change
             if (EqualityComparer<T>.Default.Equals(backingStore, value))
@@ -40,6 +45,7 @@ namespace TeamTimer.ViewModels.Base
             backingStore = value;
             onChanged?.Invoke();
             OnPropertyChanged(propertyName);
+            commandsToChangeCanExecute?.ForEach(c => c.ChangeCanExecute());
             return true;
         }
 

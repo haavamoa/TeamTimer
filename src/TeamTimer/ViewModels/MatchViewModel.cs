@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using TeamTimer.ViewModels.Interfaces;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
 
 namespace TeamTimer.ViewModels

@@ -23,7 +23,7 @@ namespace TeamTimer.ViewModels
         {
             m_matchViewModel = matchViewModel;
             SaveTeamCommand = new AsyncCommand(_ => SavePlayersAndNavigate());
-            AddPlayerCommand = new Command(() => AddPlayerOrPlayers());
+            AddPlayerCommand = new Command(AddPlayerOrPlayers, () => !string.IsNullOrEmpty(NewPlayerName));
             Players = new ObservableCollection<PlayerViewModel>();
         }
 
@@ -40,7 +40,7 @@ namespace TeamTimer.ViewModels
         public string NewPlayerName
         {
             get => m_newPlayerName;
-            set => SetProperty(ref m_newPlayerName, value);
+            set => SetProperty(ref m_newPlayerName, value, commandsToChangeCanExecute: (Command)AddPlayerCommand);
         }
 
         public async Task Initialize()

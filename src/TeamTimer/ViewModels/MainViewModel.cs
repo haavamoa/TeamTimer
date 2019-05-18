@@ -30,6 +30,7 @@ namespace TeamTimer.ViewModels
         public void OnPlayerDeleted(PlayerViewModel deletedPlayer) => Players.Remove(deletedPlayer);
 
         public ObservableCollection<PlayerViewModel> Players { get; }
+
         public ICommand AddPlayerCommand { get; private set; }
 
         public INavigation Navigation { get; set; }
@@ -70,7 +71,7 @@ namespace TeamTimer.ViewModels
 
         private bool IsMultipleNames(string newPlayerName, out List<PlayerViewModel> players)
         {
-            var newPlayerNames = NewPlayerName.Split(new char[]{';'}, StringSplitOptions.RemoveEmptyEntries);
+            var newPlayerNames = newPlayerName.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             players = new List<PlayerViewModel>();
             players.AddRange(newPlayerNames.Select(newplayer => new PlayerViewModel(new Player(newplayer))));
             return players.Any();

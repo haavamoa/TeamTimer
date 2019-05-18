@@ -13,6 +13,7 @@ namespace TeamTimer.Views
 
             mainViewModel.Navigation = Navigation;
             BindingContext = mainViewModel;
+            
         }
 
         private void AddPlayerButton_Clicked(object sender, EventArgs e)

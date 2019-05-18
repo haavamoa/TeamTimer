@@ -11,16 +11,16 @@
              mc:Ignorable="dblend"
              dblend:DataContext="{dblend:DesignInstance ViewModels:IMainViewModel}"
              xmlns:ViewModels="clr-namespace:TeamTimer.ViewModels.Interfaces.ViewModels;assembly=TeamTimer"
-             Title="Team"
+             Title="Setup Team"
              Visual="Material">
-    <Grid Padding="5">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <!-- Add new player Grid-->
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0" BackgroundColor="White" Padding="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -37,22 +37,33 @@
                     Clicked="AddPlayerButton_Clicked" />
         </Grid>
         <!-- List of players -->
-        <ListView Grid.Row="1" ItemsSource="{Binding Players}">
+        <ListView Grid.Row="1"
+                  ItemsSource="{Binding Players}"
+                  HasUnevenRows="True"
+                  Header="Team"
+                  SelectionMode="None"
+                  Margin="5">
+            <!--<d:ListView.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Item One</x:String>
+                    <x:String>Item Two</x:String>
+                    <x:String>Item Three</x:String>
+                </x:Array>
+            </d:ListView.ItemsSource>-->
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Grid>
+                        <Grid Padding="5">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Entry Grid.Column="0"
-                                   Text="{Binding Name}"
-                                   Margin="10,0,0,0" />
-                            <Button Grid.Column="1"
+                            <Button Grid.Column="0"
                                     Command="{Binding DeletePlayerCommand}"
                                     Text="Remove"
                                     Style="{StaticResource buttonStyle}" />
+                            <Entry Grid.Column="1"
+                                   Text="{Binding Name}" />
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

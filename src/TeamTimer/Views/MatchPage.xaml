@@ -1,15 +1,35 @@
 <?xml version="1.0"
       encoding="utf-8"?>
+
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              Title="Match"
              x:Class="TeamTimer.Views.MatchPage"
-             >
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dblend="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ViewModels="clr-namespace:TeamTimer.ViewModels.Interfaces.ViewModels;assembly=TeamTimer"
+             mc:Ignorable="dblend"
+             dblend:DataContext="{dblend:DesignInstance ViewModels:IMatchViewModel}">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Hello, world!"
-                   VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height=".5*" />
+            </Grid.RowDefinitions>
+
+            <BoxView Grid.Row="0"
+                     BackgroundColor="Gray" />
+
+
+            <ListView Grid.Row="1"
+                      BackgroundColor="Green"
+                      ItemsSource="{Binding PlayingPlayers}"/>
+
+                <ListView Grid.Row="2"
+                      BackgroundColor="Yellow"
+                      ItemsSource="{Binding NonPlayingPlayers}" />
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

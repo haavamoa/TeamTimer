@@ -58,10 +58,10 @@ namespace TeamTimer.ViewModels
 
         public int NumberOfStartingPlayers => Players.Count(p => p.IsPlaying);
 
-        public async Task Initialize(INavigation navigation)
+        public Task Initialize(INavigation navigation)
         {
             m_navigation = navigation;
-            await m_matchViewModel.Initialize();
+            return Task.CompletedTask;
         }
 
         private void AddPlayerOrPlayers()
@@ -107,6 +107,7 @@ namespace TeamTimer.ViewModels
                         await m_navigation.PushAsync(new MainPage(this));
                         break;
                     case MainPage _:
+                        await m_matchViewModel.Initialize(Players.Where(p => p.IsPlaying).ToList(), Players.Where(p => !p.IsPlaying).ToList());
                         await m_navigation.PushAsync(new MatchPage(m_matchViewModel));
                         break;
                 }

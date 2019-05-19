@@ -6,18 +6,18 @@ namespace TeamTimer.Resources.Commands
 {
     public class AsyncCommand : ICommand
     {
-        private readonly Func<object, bool> _canExecute;
-        private readonly Func<object, Task> _command;
+        private readonly Func<object, bool> m_canExecute;
+        private readonly Func<object, Task> m_command;
 
-        public AsyncCommand(Func<object, Task> command, Func<object, bool> canExecute = null)
+        public AsyncCommand(Func<object, Task> command, Func<object, bool>? canExecute = null)
         {
-            _command = command;
-            _canExecute = canExecute ?? (o => true);
+            m_command = command;
+            m_canExecute = canExecute ?? (o => true);
         }
 
         public bool CanExecute(object parameter)
         {
-            return _canExecute(parameter);
+            return m_canExecute(parameter);
         }
 
         public async void Execute(object parameter)
@@ -27,13 +27,12 @@ namespace TeamTimer.Resources.Commands
 
         public event EventHandler CanExecuteChanged;
 
-        public async Task ExecuteAsync(object parameter = null)
+        public async Task ExecuteAsync(object parameter)
         {
-
-            await _command(parameter);
+            await m_command(parameter);
         }
 
-        public void RaiseCanExecuteChanged()
+        public void ChangeCanExecute()
         {
             CanExecuteChanged?.Invoke(null, new EventArgs());
         }

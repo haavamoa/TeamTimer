@@ -30,8 +30,8 @@ namespace TeamTimer.ViewModels.Base
             ref T backingStore,
             T value,
             [CallerMemberName] string propertyName = "",
-            Action onChanged = null,
-            Func<T, T, bool> validateValue = null,
+            Action? onChanged = null,
+            Func<T, T, bool>? validateValue = null,
             params Command[] commandsToChangeCanExecute)
         {
             //if value didn't change

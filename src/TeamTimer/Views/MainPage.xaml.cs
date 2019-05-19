@@ -11,7 +11,6 @@ namespace TeamTimer.Views
         {
             InitializeComponent();
 
-            mainViewModel.Navigation = Navigation;
             BindingContext = mainViewModel;
             
         }

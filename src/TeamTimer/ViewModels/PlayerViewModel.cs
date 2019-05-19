@@ -9,12 +9,12 @@ namespace TeamTimer.ViewModels
     public class PlayerViewModel : BaseViewModel
     {
         private readonly Player m_player;
-        private IHandleTeam m_teamHandler;
+        private IHandleTeam? m_teamHandler;
 
         public PlayerViewModel(Player player)
         {
             m_player = player;
-            DeletePlayerCommand = new Command(_ => m_teamHandler.OnPlayerDeleted(this));
+            DeletePlayerCommand = new Command(_ => m_teamHandler?.OnPlayerDeleted(this));
         }
         
 

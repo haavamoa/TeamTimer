@@ -17,7 +17,8 @@ namespace TeamTimer.ViewModels
     public class MainViewModel : BaseViewModel, IMainViewModel, IHandleTeam
     {
         private readonly IMatchViewModel m_matchViewModel;
-        private string m_newPlayerName;
+        private string m_newPlayerName = string.Empty;
+        private INavigation? m_navigation;
 
         public MainViewModel(IMatchViewModel matchViewModel)
         {
@@ -33,7 +34,6 @@ namespace TeamTimer.ViewModels
 
         public ICommand AddPlayerCommand { get; private set; }
 
-        public INavigation Navigation { get; set; }
 
         public ICommand SaveTeamCommand { get; private set; }
 
@@ -43,8 +43,9 @@ namespace TeamTimer.ViewModels
             set => SetProperty(ref m_newPlayerName, value, commandsToChangeCanExecute: (Command)AddPlayerCommand);
         }
 
-        public async Task Initialize()
+        public async Task Initialize(INavigation navigation)
         {
+            m_navigation = navigation;
             await m_matchViewModel.Initialize();
         }
 
@@ -79,15 +80,18 @@ namespace TeamTimer.ViewModels
 
         private async Task SavePlayersAndNavigate()
         {
-            var currentPage = Navigation.NavigationStack.LastOrDefault();
-            switch (currentPage)
+            if (m_navigation != null)
             {
-                case null:
-                    await Navigation.PushAsync(new MainPage(this));
-                    break;
-                case MainPage _:
-                    await Navigation.PushAsync(new MatchPage(m_matchViewModel));
-                    break;
+                var currentPage = m_navigation.NavigationStack.LastOrDefault();
+                switch (currentPage)
+                {
+                    case null:
+                        await m_navigation.PushAsync(new MainPage(this));
+                        break;
+                    case MainPage _:
+                        await m_navigation.PushAsync(new MatchPage(m_matchViewModel));
+                        break;
+                }
             }
         }
     }

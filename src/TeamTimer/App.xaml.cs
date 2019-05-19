@@ -25,7 +25,7 @@ namespace TeamTimer
 
         protected override async void OnStart()
         {
-            await m_mainViewModel.Initialize(MainPage.Navigation);
+            await m_mainViewModel.Initialize(((NavigationPage)MainPage).CurrentPage.Navigation);
         }
 
         protected override void OnSleep()

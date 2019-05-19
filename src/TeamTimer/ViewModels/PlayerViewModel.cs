@@ -1,3 +1,4 @@
+using System.Diagnostics.Contracts;
 using System.Windows.Input;
 using TeamTimer.Models;
 using TeamTimer.ViewModels.Base;
@@ -10,25 +11,28 @@ namespace TeamTimer.ViewModels
     {
         private readonly Player m_player;
         private IHandleTeam? m_teamHandler;
+        private bool m_isPlaying;
 
         public PlayerViewModel(Player player)
         {
             m_player = player;
             DeletePlayerCommand = new Command(_ => m_teamHandler?.OnPlayerDeleted(this));
         }
-        
 
-        public string Name
-        {
-            get => m_player.Name;
-            set
-            {
-                m_player.Name = value;
-                OnPropertyChanged();
-            }
-        }
+
+        public string Name => m_player.Name;
 
         public ICommand DeletePlayerCommand { get; private set; }
+
+        public bool IsPlaying
+        {
+            get => m_isPlaying;
+            set
+            {
+                SetProperty(ref m_isPlaying, value);
+                m_teamHandler?.OnPlayerChanged(this);
+            }
+        }
 
         public void Initialize(IHandleTeam teamHandler)
         {

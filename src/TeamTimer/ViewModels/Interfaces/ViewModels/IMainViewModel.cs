@@ -11,6 +11,7 @@ namespace TeamTimer.ViewModels.Interfaces.ViewModels
         ICommand AddPlayerCommand { get; }
         ICommand SaveTeamCommand { get; }
         string NewPlayerName { get; set; }
+        int NumberOfStartingPlayers { get; }
         Task Initialize(INavigation navigation);
     }
 }

@@ -11,8 +11,15 @@
              mc:Ignorable="dblend"
              dblend:DataContext="{dblend:DesignInstance ViewModels:IMainViewModel}"
              xmlns:ViewModels="clr-namespace:TeamTimer.ViewModels.Interfaces.ViewModels;assembly=TeamTimer"
+             xmlns:ViewModels1="clr-namespace:TeamTimer.ViewModels;assembly=TeamTimer"
+             xmlns:Converters="clr-namespace:TeamTimer.Resources.Converters;assembly=TeamTimer"
              Title="Setup Team"
              Visual="Material">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding SaveTeamCommand}"
+            Text="Save" />
+    </ContentPage.ToolbarItems>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -32,27 +39,69 @@
             <Button Grid.Column="1"
                     Command="{Binding AddPlayerCommand}"
                     Text="Add"
-                    CornerRadius="18"
                     Style="{StaticResource buttonStyle}"
                     Clicked="AddPlayerButton_Clicked" />
         </Grid>
-        <!-- List of players -->
+        <!-- Team is empty label -->
+        <Label x:Name="EmptyTeamLabel"
+               Text="Team is empty, please add players"
+               Grid.Row="1"
+               IsVisible="{Binding Players, Converter={Converters:IsListEmptyConverter}}"
+               HorizontalOptions="CenterAndExpand"
+               VerticalOptions="CenterAndExpand" />
+        <!--Team list-->
         <ListView Grid.Row="1"
                   ItemsSource="{Binding Players}"
                   HasUnevenRows="True"
-                  Header="Team"
+                  Header="{Binding .}"
                   SelectionMode="None"
-                  Margin="5">
-            <!--<d:ListView.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Item One</x:String>
-                    <x:String>Item Two</x:String>
-                    <x:String>Item Three</x:String>
-                </x:Array>
-            </d:ListView.ItemsSource>-->
+                  Margin="5"
+                  IsVisible="{Binding Source={x:Reference EmptyTeamLabel}, Path=IsVisible, Converter={Converters:InvertedBoolConverter}}"
+                  SeparatorColor="{StaticResource ColorPrimaryDark}"
+                  SeparatorVisibility="Default">
+            <!-- Header of team list -->
+            <ListView.HeaderTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="1" />
+                        </Grid.RowDefinitions>
+                        <Label Grid.Column="0"
+                               Grid.Row="0"
+                               Text="{Binding Players.Count, StringFormat='{0} total players'}"
+                               VerticalOptions="End"
+                               Opacity=".7" />
+                        <Label Grid.Column="1"
+                               Grid.Row="0"
+                               VerticalOptions="End"
+                               Opacity=".7"
+                               Text="{Binding NumberOfStartingPlayers, StringFormat='{0} will start playing'}">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="{x:Type Label}"
+                                             Binding="{Binding NumberOfStartingPlayers}"
+                                             Value="0">
+                                    <Setter Property="TextColor"
+                                            Value="Red" />
+                                    <Setter Property="FontAttributes"
+                                            Value="Bold" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                        <BoxView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"
+                                 HeightRequest=".1"
+                                 BackgroundColor="{StaticResource ColorPrimaryDark}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.HeaderTemplate>
+            <!-- Each player in team lits -->
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <ViewCell>
+                    <ViewCell Tapped="PlayerViewModel_Tapped">
                         <Grid Padding="5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -61,19 +110,31 @@
                             <Button Grid.Column="0"
                                     Command="{Binding DeletePlayerCommand}"
                                     Text="Remove"
+                                    Scale="0.8"
                                     Style="{StaticResource buttonStyle}" />
-                            <Entry Grid.Column="1"
-                                   Text="{Binding Name}" />
+                            <Label Grid.Column="1"
+                                   Text="{Binding Name}"
+                                   FontSize="17"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center" />
+                            <Grid.Triggers>
+                                <DataTrigger TargetType="{x:Type Grid}"
+                                             Binding="{Binding IsPlaying}" Value="True">
+                                    <Setter Property="BackgroundColor" Value="{StaticResource SelectedListItemColor}" />
+
+                                </DataTrigger>
+                                <DataTrigger TargetType="Grid"
+                                             Binding="{Binding IsPlaying}"
+                                             Value="False">
+                                    <Setter Property="BackgroundColor"
+                                            Value="{StaticResource NonSelectedListItemColor}" />
+                                </DataTrigger>
+                            </Grid.Triggers>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
         <!-- Save team -->
-        <Button Grid.Row="2"
-                Command="{Binding SaveTeamCommand}"
-                Text="Save"
-                CornerRadius="18"
-                Style="{StaticResource buttonStyle}" />
     </Grid>
 </ContentPage>

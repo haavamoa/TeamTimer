@@ -23,12 +23,25 @@ namespace TeamTimer.ViewModels
         public MainViewModel(IMatchViewModel matchViewModel)
         {
             m_matchViewModel = matchViewModel;
-            SaveTeamCommand = new AsyncCommand(_ => SavePlayersAndNavigate());
+            SaveTeamCommand = new AsyncCommand(_ => SavePlayersAndNavigate(), _ => Players.Any(p => p.IsPlaying));
             AddPlayerCommand = new Command(AddPlayerOrPlayers, () => !string.IsNullOrEmpty(NewPlayerName));
             Players = new ObservableCollection<PlayerViewModel>();
         }
 
-        public void OnPlayerDeleted(PlayerViewModel deletedPlayer) => Players.Remove(deletedPlayer);
+        public void OnPlayerDeleted(PlayerViewModel deletedPlayer)
+        {
+            Players.Remove(deletedPlayer);
+            OnPropertyChanged(nameof(NumberOfStartingPlayers));
+            OnPropertyChanged(nameof(Players));
+            ((AsyncCommand)SaveTeamCommand).ChangeCanExecute();
+        }
+
+        public void OnPlayerChanged(PlayerViewModel changedPlayer)
+        {
+            OnPropertyChanged(nameof(NumberOfStartingPlayers));
+            OnPropertyChanged(nameof(Players));
+            ((AsyncCommand)SaveTeamCommand).ChangeCanExecute();
+        }
 
         public ObservableCollection<PlayerViewModel> Players { get; }
 
@@ -42,6 +55,8 @@ namespace TeamTimer.ViewModels
             get => m_newPlayerName;
             set => SetProperty(ref m_newPlayerName, value, commandsToChangeCanExecute: (Command)AddPlayerCommand);
         }
+
+        public int NumberOfStartingPlayers => Players.Count(p => p.IsPlaying);
 
         public async Task Initialize(INavigation navigation)
         {
@@ -61,16 +76,19 @@ namespace TeamTimer.ViewModels
             }
 
             NewPlayerName = string.Empty;
+            OnPropertyChanged(nameof(NumberOfStartingPlayers));
         }
 
         private void AddPlayer(string newPlayerName)
         {
             var newPlayer = new PlayerViewModel(new Player(newPlayerName));
-            newPlayer.Initialize(this as IHandleTeam);
+            newPlayer.Initialize(this);
             Players.Add(newPlayer);
+            OnPropertyChanged(nameof(Players));
+            ((AsyncCommand)SaveTeamCommand).ChangeCanExecute();
         }
 
-        private bool IsMultipleNames(string newPlayerName, out List<PlayerViewModel> players)
+        private static bool IsMultipleNames(string newPlayerName, out List<PlayerViewModel> players)
         {
             var newPlayerNames = newPlayerName.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             players = new List<PlayerViewModel>();

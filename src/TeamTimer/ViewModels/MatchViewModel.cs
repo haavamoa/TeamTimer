@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -12,7 +13,7 @@ using Xamarin.Forms.Internals;
 
 namespace TeamTimer.ViewModels
 {
-    public class MatchViewModel : BaseViewModel, IMatchViewModel
+    public class MatchViewModel : BaseViewModel, IMatchViewModel, IDisposable
     {
         public MatchViewModel()
         {
@@ -22,6 +23,7 @@ namespace TeamTimer.ViewModels
             PauseMatchCommand = new Command(PauseMatch);
             MarkPlayerForSubCommand = new Command(MarkPlayerForSub);
             m_timer = new Timer() { Interval = 1000 };
+            m_matchDuration = string.Empty;
             m_timer.Elapsed += OnEachMatchSecond;
         }
 
@@ -39,8 +41,19 @@ namespace TeamTimer.ViewModels
 
         private void OnEachMatchSecond(object sender, ElapsedEventArgs e)
         {
+            m_matchDurationSeconds += 1;
+            MatchDuration = TimeSpan.FromSeconds(m_matchDurationSeconds).ToString();
+
             PlayingPlayers.ForEach(p => p.PlayTimeInSeconds += 1);
             SortPlayingPlayers();
+        }
+
+        private string m_matchDuration;
+
+        public string MatchDuration
+        {
+            get => m_matchDuration;
+            set => SetProperty(ref m_matchDuration, value);
         }
 
         private void SortPlayingPlayers()
@@ -56,6 +69,7 @@ namespace TeamTimer.ViewModels
         public ICommand MarkPlayerForSubCommand { get; }
         private bool m_isMatchStarted;
         private readonly Timer m_timer;
+        private int m_matchDurationSeconds;
 
         public bool IsMatchStarted
         {
@@ -78,20 +92,13 @@ namespace TeamTimer.ViewModels
             if (!(obj is PlayerViewModel player)) return;
 
             if (PlayingPlayers.Contains(player))
-            {
                 DeMarkEveryoneExcept(PlayingPlayers, player);
-            }
             else
-            {
                 DeMarkEveryoneExcept(NonPlayingPlayers, player);
-            }
 
             player.IsMarkedForSubstitution = !player.IsMarkedForSubstitution;
 
-            if (ShouldSubstitute)
-            {
-                Substitute();
-            }
+            if (ShouldSubstitute) Substitute();
         }
 
         private static void DeMarkEveryoneExcept(IEnumerable<PlayerViewModel> listOfPlayers, PlayerViewModel thePlayerToIgnore)
@@ -103,22 +110,13 @@ namespace TeamTimer.ViewModels
         {
             PlayerViewModel? playingPlayerToSub = null;
             foreach (var playingPlayer in PlayingPlayers)
-            {
                 if (playingPlayer.IsMarkedForSubstitution)
-                {
                     playingPlayerToSub = playingPlayer;
-                }
-            }
 
             PlayerViewModel? nonPlayingPlayerToSub = null;
             foreach (var nonPlayingPlayer in NonPlayingPlayers)
-            {
                 if (nonPlayingPlayer.IsMarkedForSubstitution)
-                {
                     nonPlayingPlayerToSub = nonPlayingPlayer;
-                }
-            }
-
 
             if (playingPlayerToSub != null && nonPlayingPlayerToSub != null)
             {
@@ -131,11 +129,16 @@ namespace TeamTimer.ViewModels
                 playingPlayerToSub.IsMarkedForSubstitution = false;
                 nonPlayingPlayerToSub.IsMarkedForSubstitution = false;
 
-                 SortPlayingPlayers();
+                SortPlayingPlayers();
 
                 OnPropertyChanged(nameof(PlayingPlayers));
                 OnPropertyChanged(nameof(NonPlayingPlayers));
             }
+        }
+
+        public void Dispose()
+        {
+            m_timer.Elapsed -= OnEachMatchSecond;
         }
     }
 }

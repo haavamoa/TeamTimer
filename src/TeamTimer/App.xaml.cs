@@ -11,7 +11,7 @@ namespace TeamTimer
 {
     public partial class App : Application
     {
-        private IMainViewModel m_mainViewModel;
+        private readonly IMainViewModel m_mainViewModel;
 
         public App()
         {
@@ -37,5 +37,6 @@ namespace TeamTimer
         {
             // Handle when your app resumes
         }
+
     }
 }

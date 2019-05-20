@@ -39,14 +39,21 @@
             </Grid.RowDefinitions>
 
             <!-- Start match button-->
-            <Button Grid.Row="0" 
-                    Command="{Binding StartMatchCommand}"
-                    Text="Start match" 
-                    IsVisible="{Binding IsMatchStarted, Converter={Converters:InvertedBoolConverter}}"/>
-            <Button Grid.Row="0" 
-                    Command="{Binding PauseMatchCommand}"
-                    Text="Pause match" 
-                    IsVisible="{Binding IsMatchStarted}"/>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0"
+                        Command="{Binding StartMatchCommand}"
+                        Text="Start match"
+                        IsVisible="{Binding IsMatchStarted, Converter={Converters:InvertedBoolConverter}}" />
+                <Button Grid.Row="0"
+                        Command="{Binding PauseMatchCommand}"
+                        Text="Pause match"
+                        IsVisible="{Binding IsMatchStarted}" />
+                <Label Grid.Row="1" Text="{Binding MatchDuration, StringFormat='Duration : {0}'}" HorizontalOptions="CenterAndExpand" />
+            </Grid>
 
 
             <!-- Playing players -->

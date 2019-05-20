@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.Contracts;
 using System.Windows.Input;
 using TeamTimer.Models;
@@ -41,6 +42,20 @@ namespace TeamTimer.ViewModels
             get => m_isMarkedForSubstitution;
             set => SetProperty(ref m_isMarkedForSubstitution, value);
         }
+
+        private int m_playTimeInSeconds;
+
+        public int PlayTimeInSeconds
+        {
+            get => m_playTimeInSeconds;
+            set
+            {
+                SetProperty(ref m_playTimeInSeconds, value);
+                OnPropertyChanged(nameof(PlayTimeInString));
+            } 
+        }
+
+        public string PlayTimeInString => TimeSpan.FromSeconds(PlayTimeInSeconds).ToString();
 
         public void Initialize(IHandleTeam teamHandler)
         {

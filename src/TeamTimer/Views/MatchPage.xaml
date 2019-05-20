@@ -13,6 +13,23 @@
              xmlns:Converters="clr-namespace:TeamTimer.Resources.Converters;assembly=TeamTimer"
              mc:Ignorable="dblend"
              dblend:DataContext="{dblend:DesignInstance ViewModels:IMatchViewModel}">
+    <ContentPage.Resources>
+        <DataTemplate x:Key="PlayerCardDataTemplate">
+            <Frame BackgroundColor="{Binding IsMarkedForSubstitution, Converter={Converters:MarkedForSubToColorConverter}}"
+                   Margin="5"
+                   HeightRequest="25"
+                   CornerRadius="18"
+                   WidthRequest="25">
+                <StackLayout Orientation="Vertical" VerticalOptions="CenterAndExpand">
+                    <Label Text="{Binding Name}" TextColor="Black" />
+                    <Label Text="{Binding PlayTimeInString}"
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="Black" />
+                </StackLayout>
+            </Frame>
+        </DataTemplate>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
@@ -22,8 +39,15 @@
             </Grid.RowDefinitions>
 
             <!-- Start match button-->
-            <BoxView Grid.Row="0"
-                     BackgroundColor="Gray" />
+            <Button Grid.Row="0" 
+                    Command="{Binding StartMatchCommand}"
+                    Text="Start match" 
+                    IsVisible="{Binding IsMatchStarted, Converter={Converters:InvertedBoolConverter}}"/>
+            <Button Grid.Row="0" 
+                    Command="{Binding PauseMatchCommand}"
+                    Text="Pause match" 
+                    IsVisible="{Binding IsMatchStarted}"/>
+
 
             <!-- Playing players -->
             <fvl:FlowListView Grid.Row="1"
@@ -32,19 +56,8 @@
                               HasUnevenRows="True"
                               Header="Playing players"
                               FlowItemTappedCommand="{Binding MarkPlayerForSubCommand}"
-                              SelectionMode="Single">
-                <fvl:FlowListView.FlowColumnTemplate>
-                    <DataTemplate>
-                        <Frame BackgroundColor="{Binding IsMarkedForSubstitution, Converter={Converters:MarkedForSubToColorConverter}}"
-                            Margin="5"
-                            HeightRequest="25"
-                            CornerRadius="18"
-                            WidthRequest="25">
-                            <Label Text="{Binding Name}" TextColor="Black" />
-                        </Frame>
-                    </DataTemplate>
-                </fvl:FlowListView.FlowColumnTemplate>
-            </fvl:FlowListView>
+                              FlowColumnTemplate="{StaticResource PlayerCardDataTemplate}"
+                              />
 
             <!-- Non playing players -->
             <fvl:FlowListView Grid.Row="2"
@@ -53,19 +66,8 @@
                               HasUnevenRows="True"
                               Header="Non playing players"
                               FlowItemTappedCommand="{Binding MarkPlayerForSubCommand}"
-                              >
-                <fvl:FlowListView.FlowColumnTemplate>
-                    <DataTemplate>
-                        <Frame BackgroundColor="{Binding IsMarkedForSubstitution, Converter={Converters:MarkedForSubToColorConverter}}"
-                               Margin="5"
-                               HeightRequest="25"
-                               CornerRadius="18"
-                               WidthRequest="25">
-                            <Label Text="{Binding Name}" TextColor="Black" />
-                        </Frame>
-                    </DataTemplate>
-                </fvl:FlowListView.FlowColumnTemplate>
-            </fvl:FlowListView>
+                              FlowColumnTemplate="{StaticResource PlayerCardDataTemplate}"
+                              />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

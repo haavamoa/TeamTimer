@@ -9,6 +9,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:dblend="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ViewModels="clr-namespace:TeamTimer.ViewModels.Interfaces.ViewModels;assembly=TeamTimer"
+             xmlns:fvl="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
              mc:Ignorable="dblend"
              dblend:DataContext="{dblend:DesignInstance ViewModels:IMatchViewModel}">
     <ContentPage.Content>
@@ -22,12 +23,20 @@
             <BoxView Grid.Row="0"
                      BackgroundColor="Gray" />
 
-
+            <fvl:FlowListView Grid.Row="0" 
+                              FlowItemsSource="{Binding PlayingPlayers}" 
+                              FlowColumnCount="4" HasUnevenRows="True">
+                <fvl:FlowListView.FlowColumnTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding Name}"/>
+                    </DataTemplate>
+                </fvl:FlowListView.FlowColumnTemplate>
+            </fvl:FlowListView>
             <ListView Grid.Row="1"
                       BackgroundColor="Green"
-                      ItemsSource="{Binding PlayingPlayers}"/>
+                      ItemsSource="{Binding PlayingPlayers}" />
 
-                <ListView Grid.Row="2"
+            <ListView Grid.Row="2"
                       BackgroundColor="Yellow"
                       ItemsSource="{Binding NonPlayingPlayers}" />
         </Grid>

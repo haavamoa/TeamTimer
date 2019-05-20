@@ -35,12 +35,15 @@
             <Entry x:Name="NewPlayerEntry"
                    Grid.Column="0"
                    Text="{Binding NewPlayerName}"
-                   Placeholder="Player name" />
+                   Placeholder="Player name"
+                   Completed="OnPlayerAdded"
+                   ReturnCommand="{Binding AddPlayerCommand}"
+                   Keyboard="Text"/>
             <Button Grid.Column="1"
                     Command="{Binding AddPlayerCommand}"
                     Text="Add"
                     Style="{StaticResource buttonStyle}"
-                    Clicked="AddPlayerButton_Clicked" />
+                    Clicked="OnPlayerAdded" />
         </Grid>
         <!-- Team is empty label -->
         <Label x:Name="EmptyTeamLabel"
@@ -101,7 +104,7 @@
             <!-- Each player in team lits -->
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <ViewCell Tapped="PlayerViewModel_Tapped">
+                    <ViewCell Tapped="OnViewCellTapped">
                         <Grid Padding="5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />

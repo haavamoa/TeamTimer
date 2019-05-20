@@ -16,12 +16,12 @@ namespace TeamTimer.Views
             
         }
 
-        private void AddPlayerButton_Clicked(object sender, EventArgs e)
+        private void OnPlayerAdded(object sender, EventArgs e)
         {
             NewPlayerEntry.Focus();
         }
 
-        private void PlayerViewModel_Tapped(object sender, EventArgs e)
+        private void OnViewCellTapped(object sender, EventArgs e)
         {
             if (sender is ViewCell tappedViewCell)
             {

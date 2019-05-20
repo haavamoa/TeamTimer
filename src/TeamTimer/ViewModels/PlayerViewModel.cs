@@ -34,6 +34,14 @@ namespace TeamTimer.ViewModels
             }
         }
 
+        private bool m_isMarkedForSubstitution;
+
+        public bool IsMarkedForSubstitution
+        {
+            get => m_isMarkedForSubstitution;
+            set => SetProperty(ref m_isMarkedForSubstitution, value);
+        }
+
         public void Initialize(IHandleTeam teamHandler)
         {
             m_teamHandler = teamHandler;

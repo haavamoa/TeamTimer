@@ -10,6 +10,7 @@
              xmlns:dblend="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ViewModels="clr-namespace:TeamTimer.ViewModels.Interfaces.ViewModels;assembly=TeamTimer"
              xmlns:fvl="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
+             xmlns:Converters="clr-namespace:TeamTimer.Resources.Converters;assembly=TeamTimer"
              mc:Ignorable="dblend"
              dblend:DataContext="{dblend:DesignInstance ViewModels:IMatchViewModel}">
     <ContentPage.Content>
@@ -20,25 +21,51 @@
                 <RowDefinition Height=".5*" />
             </Grid.RowDefinitions>
 
+            <!-- Start match button-->
             <BoxView Grid.Row="0"
                      BackgroundColor="Gray" />
 
-            <fvl:FlowListView Grid.Row="0" 
-                              FlowItemsSource="{Binding PlayingPlayers}" 
-                              FlowColumnCount="4" HasUnevenRows="True">
+            <!-- Playing players -->
+            <fvl:FlowListView Grid.Row="1"
+                              FlowItemsSource="{Binding PlayingPlayers}"
+                              FlowColumnCount="4"
+                              HasUnevenRows="True"
+                              Header="Playing players"
+                              FlowItemTappedCommand="{Binding MarkPlayerForSubCommand}"
+                              SelectionMode="Single">
                 <fvl:FlowListView.FlowColumnTemplate>
                     <DataTemplate>
-                        <Label Text="{Binding Name}"/>
+                        <Frame BackgroundColor="{Binding IsMarkedForSubstitution, Converter={Converters:MarkedForSubToColorConverter}}"
+                            Margin="5"
+                            HeightRequest="25"
+                            CornerRadius="18"
+                            WidthRequest="25">
+                            <Label Text="{Binding Name}" TextColor="Black" />
+                        </Frame>
                     </DataTemplate>
                 </fvl:FlowListView.FlowColumnTemplate>
             </fvl:FlowListView>
-            <ListView Grid.Row="1"
-                      BackgroundColor="Green"
-                      ItemsSource="{Binding PlayingPlayers}" />
 
-            <ListView Grid.Row="2"
-                      BackgroundColor="Yellow"
-                      ItemsSource="{Binding NonPlayingPlayers}" />
+            <!-- Non playing players -->
+            <fvl:FlowListView Grid.Row="2"
+                              FlowItemsSource="{Binding NonPlayingPlayers}"
+                              FlowColumnCount="4"
+                              HasUnevenRows="True"
+                              Header="Non playing players"
+                              FlowItemTappedCommand="{Binding MarkPlayerForSubCommand}"
+                              >
+                <fvl:FlowListView.FlowColumnTemplate>
+                    <DataTemplate>
+                        <Frame BackgroundColor="{Binding IsMarkedForSubstitution, Converter={Converters:MarkedForSubToColorConverter}}"
+                               Margin="5"
+                               HeightRequest="25"
+                               CornerRadius="18"
+                               WidthRequest="25">
+                            <Label Text="{Binding Name}" TextColor="Black" />
+                        </Frame>
+                    </DataTemplate>
+                </fvl:FlowListView.FlowColumnTemplate>
+            </fvl:FlowListView>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

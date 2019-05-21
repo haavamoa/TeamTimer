@@ -42,7 +42,7 @@
             <Button Grid.Column="1"
                     Command="{Binding AddPlayerCommand}"
                     Text="Add"
-                    Style="{StaticResource buttonStyle}"
+                    Style="{StaticResource ButtonStyle}"
                     Clicked="OnPlayerAdded" />
         </Grid>
         <!-- Team is empty label -->
@@ -114,7 +114,7 @@
                                     Command="{Binding DeletePlayerCommand}"
                                     Text="Remove"
                                     Scale="0.8"
-                                    Style="{StaticResource buttonStyle}" />
+                                    Style="{StaticResource ButtonStyle}" />
                             <Label Grid.Column="1"
                                    Text="{Binding Name}"
                                    FontSize="17"
@@ -130,7 +130,7 @@
                                              Binding="{Binding IsPlaying}"
                                              Value="False">
                                     <Setter Property="BackgroundColor"
-                                            Value="{StaticResource NonSelectedListItemColor}" />
+                                            Value="{StaticResource NotSelectedListItemColor}" />
                                 </DataTrigger>
                             </Grid.Triggers>
                         </Grid>

@@ -11,70 +11,66 @@
              xmlns:ViewModels="clr-namespace:TeamTimer.ViewModels.Interfaces.ViewModels;assembly=TeamTimer"
              xmlns:fvl="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
              xmlns:Converters="clr-namespace:TeamTimer.Resources.Converters;assembly=TeamTimer"
+             Visual="Material"
              mc:Ignorable="dblend"
              dblend:DataContext="{dblend:DesignInstance ViewModels:IMatchViewModel}">
     <ContentPage.Resources>
-        <DataTemplate x:Key="PlayerCardDataTemplate">
-            <Frame BackgroundColor="{Binding IsMarkedForSubstitution, Converter={Converters:MarkedForSubToColorConverter}}"
-                   Margin="5"
-                   HeightRequest="25"
-                   CornerRadius="18"
-                   WidthRequest="25">
-                <StackLayout Orientation="Vertical" VerticalOptions="CenterAndExpand">
-                    <Label Text="{Binding Name}" TextColor="Black" />
-                    <Label Text="{Binding PlayTimeInString}"
-                           FontSize="12"
-                           FontAttributes="Bold"
-                           TextColor="Black" />
-                </StackLayout>
-            </Frame>
-        </DataTemplate>
+        <ResourceDictionary Source="PlayerCardView.xaml" />
     </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height=".1*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height=".5*" />
             </Grid.RowDefinitions>
 
             <!-- Start match button-->
-            <Grid Grid.Row="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Button Grid.Row="0"
+            <Grid Grid.Row="0"
+                  VerticalOptions="CenterAndExpand"
+                  Padding="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width=".5*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"
+                        VerticalOptions="CenterAndExpand"
                         Command="{Binding StartMatchCommand}"
                         Text="Start match"
-                        IsVisible="{Binding IsMatchStarted, Converter={Converters:InvertedBoolConverter}}" />
-                <Button Grid.Row="0"
+                        IsVisible="{Binding IsMatchStarted, Converter={Converters:InvertedBoolConverter}}"
+                        Style="{StaticResource ButtonStyle}" />
+                <Button Grid.Column="0"
+                        VerticalOptions="CenterAndExpand"
                         Command="{Binding PauseMatchCommand}"
                         Text="Pause match"
+                        Style="{StaticResource ButtonStyle}"
                         IsVisible="{Binding IsMatchStarted}" />
-                <Label Grid.Row="1" Text="{Binding MatchDuration, StringFormat='Duration : {0}'}" HorizontalOptions="CenterAndExpand" />
+                <Label Grid.Column="1"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       VerticalOptions="CenterAndExpand"
+                       Text="{Binding MatchDuration, StringFormat='Duration : {0}'}"
+                       HorizontalOptions="CenterAndExpand" />
             </Grid>
 
 
             <!-- Playing players -->
             <fvl:FlowListView Grid.Row="1"
+                              BackgroundColor="{StaticResource GreenLight}"
                               FlowItemsSource="{Binding PlayingPlayers}"
                               FlowColumnCount="4"
                               HasUnevenRows="True"
-                              Header="Playing players"
                               FlowItemTappedCommand="{Binding MarkPlayerForSubCommand}"
-                              FlowColumnTemplate="{StaticResource PlayerCardDataTemplate}"
-                              />
+                              FlowColumnTemplate="{StaticResource PlayerCardDataTemplate}" />
 
             <!-- Non playing players -->
             <fvl:FlowListView Grid.Row="2"
+                              BackgroundColor="{StaticResource RedLight}"
                               FlowItemsSource="{Binding NonPlayingPlayers}"
                               FlowColumnCount="4"
                               HasUnevenRows="True"
-                              Header="Non playing players"
                               FlowItemTappedCommand="{Binding MarkPlayerForSubCommand}"
-                              FlowColumnTemplate="{StaticResource PlayerCardDataTemplate}"
-                              />
+                              FlowColumnTemplate="{StaticResource PlayerCardDataTemplate}" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

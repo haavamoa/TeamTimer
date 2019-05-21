@@ -43,7 +43,7 @@ namespace TeamTimer.ViewModels
             ((AsyncCommand)SaveTeamCommand).ChangeCanExecute();
         }
 
-        public ObservableCollection<PlayerViewModel> Players { get; }
+        public ObservableCollection<PlayerViewModel> Players { get; private set; }
 
         public ICommand AddPlayerCommand { get; private set; }
 
@@ -76,6 +76,10 @@ namespace TeamTimer.ViewModels
             }
 
             NewPlayerName = string.Empty;
+
+            Players = new ObservableCollection<PlayerViewModel>(Players.OrderBy(p => p.Name));
+            OnPropertyChanged(nameof(Players));
+
             OnPropertyChanged(nameof(NumberOfStartingPlayers));
         }
 

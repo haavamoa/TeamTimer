@@ -1,0 +1,53 @@
+﻿<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <DataTemplate x:Key="PlayerCardDataTemplate">
+        <Frame Margin="5"
+               HeightRequest="25"
+               CornerRadius="18"
+               WidthRequest="25"
+               BorderColor="{StaticResource ColorPrimaryDark}">
+            <StackLayout Orientation="Vertical"
+                         VerticalOptions="CenterAndExpand"
+                         HorizontalOptions="CenterAndExpand">
+                <Label Text="{Binding Name}"
+                       TextColor="Black"
+                       FontSize="15"
+                       >
+                    <Label.Triggers>
+                        <DataTrigger TargetType="{x:Type Label}"
+                                     Binding="{Binding IsMarkedForSubstitution}"
+                                     Value="true">
+                            <Setter Property="FontAttributes"
+                                    Value="Bold"/>
+                        </DataTrigger>
+                        <DataTrigger TargetType="{x:Type Label}"
+                                     Binding="{Binding IsMarkedForSubstitution}"
+                                     Value="false">
+                            <Setter Property="FontAttributes"
+                                    Value="None" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+                <Label Text="{Binding PlayTimeInString}"
+                       FontSize="12"
+                       FontAttributes="Bold"
+                       TextColor="Black" />
+            </StackLayout>
+            <Frame.Triggers>
+                <DataTrigger TargetType="{Type Frame}"
+                             Binding="{Binding IsMarkedForSubstitution}"
+                             Value="True">
+                    <Setter Property="BackgroundColor"
+                            Value="{StaticResource SelectedListItemColor}" />
+                </DataTrigger>
+                <DataTrigger TargetType="{Type Frame}"
+                             Binding="{Binding IsMarkedForSubstitution}"
+                             Value="False">
+                    <Setter Property="BackgroundColor"
+                            Value="{StaticResource NotSelectedListItemColor}" />
+                </DataTrigger>
+            </Frame.Triggers>
+        </Frame>
+    </DataTemplate>
+</ResourceDictionary>

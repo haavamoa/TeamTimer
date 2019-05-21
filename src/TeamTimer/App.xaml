@@ -8,12 +8,12 @@
             <Color x:Key="ColorPrimary">#334955</Color>
             <Color x:Key="ColorPrimaryDark">#334955</Color>
             <Color x:Key="ColorAccent">#F9AA33</Color>
-            <Color x:Key="GreenLight">#dce8ca</Color>
-            <Color x:Key="RedLight">#efdcdc</Color>
-            <Color x:Key="NonSelectedListItemColor">#f2f2f2</Color>
-            <Color x:Key="SelectedListItemColor">#d9d9d9</Color>
+            <Color x:Key="GreenLight">#f3f7ed</Color>
+            <Color x:Key="RedLight">#f7eeee</Color>
+            <Color x:Key="NotSelectedListItemColor">#f2f2f2</Color>
+            <Color x:Key="SelectedListItemColor">#d9e2d9</Color>
 
-            <Style x:Key="buttonStyle" TargetType="Button">
+            <Style x:Key="ButtonStyle" TargetType="Button">
                 <Setter Property="BackgroundColor" Value="{StaticResource ColorPrimary}"/>
                 <Setter Property="CornerRadius" Value="18"/>
             </Style>

@@ -23,7 +23,7 @@ namespace TeamTimer.ViewModels
             PauseMatchCommand = new Command(PauseMatch);
             MarkPlayerForSubCommand = new Command(MarkPlayerForSub);
             m_timer = new Timer() { Interval = 1000 };
-            m_matchDuration = string.Empty;
+            m_matchDuration = TimeSpan.FromSeconds(m_matchDurationSeconds).ToString();
             m_timer.Elapsed += OnEachMatchSecond;
         }
 

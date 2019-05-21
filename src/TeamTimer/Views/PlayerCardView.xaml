@@ -3,16 +3,14 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <DataTemplate x:Key="PlayerCardDataTemplate">
         <Frame Margin="5"
-               HeightRequest="25"
                CornerRadius="18"
-               WidthRequest="25"
                BorderColor="{StaticResource ColorPrimaryDark}">
-            <StackLayout Orientation="Vertical"
+            <StackLayout  Orientation="Vertical"
                          VerticalOptions="CenterAndExpand"
                          HorizontalOptions="CenterAndExpand">
                 <Label Text="{Binding Name}"
                        TextColor="Black"
-                       FontSize="15"
+                       FontSize="Medium"
                        >
                     <Label.Triggers>
                         <DataTrigger TargetType="{x:Type Label}"
@@ -30,7 +28,7 @@
                     </Label.Triggers>
                 </Label>
                 <Label Text="{Binding PlayTimeInString}"
-                       FontSize="12"
+                       FontSize="Medium"
                        FontAttributes="Bold"
                        TextColor="Black" />
             </StackLayout>

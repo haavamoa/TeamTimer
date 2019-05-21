@@ -20,7 +20,7 @@
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height=".1*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height=".5*" />
             </Grid.RowDefinitions>
@@ -30,7 +30,7 @@
                   VerticalOptions="CenterAndExpand"
                   Padding="5">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width=".5*" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0"
@@ -46,7 +46,7 @@
                         Style="{StaticResource ButtonStyle}"
                         IsVisible="{Binding IsMatchStarted}" />
                 <Label Grid.Column="1"
-                       FontSize="20"
+                       FontSize="Large"
                        FontAttributes="Bold"
                        VerticalOptions="CenterAndExpand"
                        Text="{Binding MatchDuration, StringFormat='Duration : {0}'}"

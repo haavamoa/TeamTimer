@@ -1,23 +1,24 @@
 ﻿<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:Converters="clr-namespace:TeamTimer.Resources.Converters;assembly=TeamTimer">
     <DataTemplate x:Key="PlayerCardDataTemplate">
         <Frame Margin="5"
                CornerRadius="18"
                BorderColor="{StaticResource ColorPrimaryDark}">
-            <StackLayout  Orientation="Vertical"
+            <StackLayout Orientation="Vertical"
                          VerticalOptions="CenterAndExpand"
                          HorizontalOptions="CenterAndExpand">
                 <Label Text="{Binding Name}"
                        TextColor="Black"
                        FontSize="Medium"
-                       >
+                       HorizontalOptions="CenterAndExpand">
                     <Label.Triggers>
                         <DataTrigger TargetType="{x:Type Label}"
                                      Binding="{Binding IsMarkedForSubstitution}"
                                      Value="true">
                             <Setter Property="FontAttributes"
-                                    Value="Bold"/>
+                                    Value="Bold" />
                         </DataTrigger>
                         <DataTrigger TargetType="{x:Type Label}"
                                      Binding="{Binding IsMarkedForSubstitution}"
@@ -27,10 +28,11 @@
                         </DataTrigger>
                     </Label.Triggers>
                 </Label>
-                <Label Text="{Binding PlayTimeInString}"
+                <Label Text="{Binding PlayTimeInSeconds, Converter={Converters:SecondsToStringShortFormatConverter}}"
                        FontSize="Medium"
                        FontAttributes="Bold"
-                       TextColor="Black" />
+                       TextColor="Black"
+                       HorizontalOptions="CenterAndExpand"/>
             </StackLayout>
             <Frame.Triggers>
                 <DataTrigger TargetType="{Type Frame}"

@@ -54,22 +54,26 @@
             </Grid>
 
 
-            <!-- Playing players -->
-            <fvl:FlowListView Grid.Row="1"
+            <!-- Playing players
+             FlowColumnCount gets calculated behind code
+             This is to determine how much space we have for each cell -->
+            <fvl:FlowListView x:Name="playingPlayers"
+                              Grid.Row="1"
                               BackgroundColor="{StaticResource GreenLight}"
                               FlowItemsSource="{Binding PlayingPlayers}"
-                              FlowColumnCount="4"
                               HasUnevenRows="True"
                               FlowItemTappedCommand="{Binding MarkPlayerForSubCommand}"
                               FlowColumnTemplate="{StaticResource PlayerCardDataTemplate}" />
 
-            <!-- Non playing players -->
-            <fvl:FlowListView Grid.Row="2"
+            <!-- Non playing players
+                FlowColumnCount gets calculated behind code
+             This is to determine how much space we have for each cell -->
+            <fvl:FlowListView x:Name="nonPlayingPlayers"
+                              Grid.Row="2"
                               BackgroundColor="{StaticResource RedLight}"
                               FlowItemsSource="{Binding NonPlayingPlayers}"
-                              FlowColumnCount="4"
-                              HasUnevenRows="True"
                               FlowItemTappedCommand="{Binding MarkPlayerForSubCommand}"
+                              HasUnevenRows="True"
                               FlowColumnTemplate="{StaticResource PlayerCardDataTemplate}" />
         </Grid>
     </ContentPage.Content>

@@ -16,6 +16,7 @@
     <ItemGroup>
         <PackageReference Include="DLToolkit.Forms.Controls.FlowListView" Version="2.0.11" />
         <PackageReference Include="LightInject" Version="5.5.0" />
+        <PackageReference Include="Xamarin.Essentials" Version="1.1.0" />
         <PackageReference Include="Xamarin.Forms" Version="4.0.0.425677" />
         <PackageReference Include="Xamarin.Forms.Visual.Material" Version="4.0.0.425677" />
     </ItemGroup>

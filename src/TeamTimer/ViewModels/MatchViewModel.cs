@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Input;
+using TeamTimer.Helpers;
 using TeamTimer.ViewModels.Base;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
 using Xamarin.Forms;
@@ -46,8 +47,8 @@ namespace TeamTimer.ViewModels
             PlayingPlayers.ForEach(p => p.PlayTimeInSeconds += 1);
             SortPlayingPlayers();
         }
-        
-        public string MatchDuration => TimeSpan.FromSeconds(m_matchDurationSeconds).ToString();
+
+        public string MatchDuration => TimeSpan.FromSeconds(m_matchDurationSeconds).ToShortForm();
 
         private void SortPlayingPlayers()
         {

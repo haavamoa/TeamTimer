@@ -49,7 +49,7 @@ namespace TeamTimer
                 var elapsed = whenResumedDateTime - m_whenSleptDateTime;
                 if (elapsed.HasValue)
                 {
-                    m_mainViewModel.MatchViewModel.UpdateMatchDuration(elapsed.Value.Seconds);
+                    m_mainViewModel.MatchViewModel.UpdateMatchDuration((int)elapsed.Value.TotalSeconds);
                     m_mainViewModel.MatchViewModel.OnResume();
                 }
             }

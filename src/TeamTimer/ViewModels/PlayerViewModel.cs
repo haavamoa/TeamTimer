@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics.Contracts;
 using System.Windows.Input;
+using TeamTimer.Helpers;
 using TeamTimer.Models;
 using TeamTimer.ViewModels.Base;
 using TeamTimer.ViewModels.Interfaces.Handlers;
@@ -55,7 +56,7 @@ namespace TeamTimer.ViewModels
             } 
         }
 
-        public string PlayTimeInString => TimeSpan.FromSeconds(PlayTimeInSeconds).ToString();
+        public string PlayTimeInString => TimeSpan.FromSeconds(PlayTimeInSeconds).ToShortForm();
 
         public void Initialize(IHandleTeam teamHandler)
         {

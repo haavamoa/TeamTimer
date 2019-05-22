@@ -14,5 +14,6 @@ namespace TeamTimer.ViewModels.Interfaces.ViewModels
         string NewPlayerName { get; set; }
         int NumberOfStartingPlayers { get; }
         Task Initialize(INavigation navigation);
+        IMatchViewModel MatchViewModel { get; }
     }
 }

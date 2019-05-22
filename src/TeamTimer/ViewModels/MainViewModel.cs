@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TeamTimer.Models;
@@ -16,13 +17,12 @@ namespace TeamTimer.ViewModels
 {
     public class MainViewModel : BaseViewModel, IMainViewModel, IHandleTeam
     {
-        private readonly IMatchViewModel m_matchViewModel;
         private string m_newPlayerName = string.Empty;
         private INavigation? m_navigation;
 
         public MainViewModel(IMatchViewModel matchViewModel)
         {
-            m_matchViewModel = matchViewModel;
+            MatchViewModel = matchViewModel;
             SaveTeamCommand = new AsyncCommand(_ => SavePlayersAndNavigate(), _ => Players.Any(p => p.IsPlaying));
             AddPlayerCommand = new Command(AddPlayerOrPlayers, () => !string.IsNullOrEmpty(NewPlayerName));
             Players = new ObservableCollection<PlayerViewModel>();
@@ -64,6 +64,8 @@ namespace TeamTimer.ViewModels
             return Task.CompletedTask;
         }
 
+        public IMatchViewModel MatchViewModel { get; }
+
         private void AddPlayerOrPlayers()
         {
             if (IsMultipleNames(NewPlayerName, out var players))
@@ -96,7 +98,7 @@ namespace TeamTimer.ViewModels
         {
             var newPlayerNames = newPlayerName.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             players = new List<PlayerViewModel>();
-            players.AddRange(newPlayerNames.Select(newplayer => new PlayerViewModel(new Player(newplayer))));
+            players.AddRange(newPlayerNames.Select(newPlayer => new PlayerViewModel(new Player(newPlayer))));
             return players.Any();
         }
 
@@ -111,8 +113,8 @@ namespace TeamTimer.ViewModels
                         await m_navigation.PushAsync(new MainPage(this));
                         break;
                     case MainPage _:
-                        await m_matchViewModel.Initialize(Players.Where(p => p.IsPlaying).ToList(), Players.Where(p => !p.IsPlaying).ToList());
-                        await m_navigation.PushAsync(new MatchPage(m_matchViewModel));
+                        await MatchViewModel.Initialize(Players.Where(p => p.IsPlaying).ToList(), Players.Where(p => !p.IsPlaying).ToList());
+                        await m_navigation.PushAsync(new MatchPage(MatchViewModel));
                         break;
                 }
             }

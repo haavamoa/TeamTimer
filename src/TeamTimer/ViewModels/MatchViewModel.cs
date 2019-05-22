@@ -23,7 +23,6 @@ namespace TeamTimer.ViewModels
             PauseMatchCommand = new Command(PauseMatch);
             MarkPlayerForSubCommand = new Command(MarkPlayerForSub);
             m_timer = new Timer() { Interval = 1000 };
-            m_matchDuration = TimeSpan.FromSeconds(m_matchDurationSeconds).ToString();
             m_timer.Elapsed += OnEachMatchSecond;
         }
 
@@ -42,19 +41,13 @@ namespace TeamTimer.ViewModels
         private void OnEachMatchSecond(object sender, ElapsedEventArgs e)
         {
             m_matchDurationSeconds += 1;
-            MatchDuration = TimeSpan.FromSeconds(m_matchDurationSeconds).ToString();
+            OnPropertyChanged(nameof(MatchDuration));
 
             PlayingPlayers.ForEach(p => p.PlayTimeInSeconds += 1);
             SortPlayingPlayers();
         }
-
-        private string m_matchDuration;
-
-        public string MatchDuration
-        {
-            get => m_matchDuration;
-            set => SetProperty(ref m_matchDuration, value);
-        }
+        
+        public string MatchDuration => TimeSpan.FromSeconds(m_matchDurationSeconds).ToString();
 
         private void SortPlayingPlayers()
         {
@@ -85,6 +78,24 @@ namespace TeamTimer.ViewModels
             PlayingPlayers = new ObservableCollection<PlayerViewModel>(playingPlayers);
             NonPlayingPlayers = new ObservableCollection<PlayerViewModel>(nonPlayingPlayers);
             return Task.CompletedTask;
+        }
+
+        public void UpdateMatchDuration(int seconds)
+        {
+            m_matchDurationSeconds += seconds;
+            PlayingPlayers.ForEach(p => p.PlayTimeInSeconds+=seconds);
+            OnPropertyChanged(nameof(PlayingPlayers));
+            OnPropertyChanged(nameof(MatchDuration));
+        }
+
+        public void OnSleep()
+        {
+            m_timer.Enabled = false;
+        }
+
+        public void OnResume()
+        {
+            m_timer.Enabled = true;
         }
 
         private void MarkPlayerForSub(object obj)

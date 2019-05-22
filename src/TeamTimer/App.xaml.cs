@@ -12,6 +12,7 @@ namespace TeamTimer
     public partial class App : Application
     {
         private readonly IMainViewModel m_mainViewModel;
+        private DateTime? m_whenSleptDateTime;
 
         public App()
         {
@@ -31,11 +32,27 @@ namespace TeamTimer
         protected override void OnSleep()
         {
             // Handle when your app sleeps
+            if (m_mainViewModel.MatchViewModel.IsMatchStarted)
+            {
+                m_mainViewModel.MatchViewModel.OnSleep();
+                m_whenSleptDateTime = DateTime.Now;
+            }
+          
         }
 
         protected override void OnResume()
         {
-            // Handle when your app resumes
+            if (m_mainViewModel.MatchViewModel.IsMatchStarted)
+            {
+                // Handle when your app resumes
+                var whenResumedDateTime = DateTime.Now;
+                var elapsed = whenResumedDateTime - m_whenSleptDateTime;
+                if (elapsed.HasValue)
+                {
+                    m_mainViewModel.MatchViewModel.UpdateMatchDuration(elapsed.Value.Seconds);
+                    m_mainViewModel.MatchViewModel.OnResume();
+                }
+            }
         }
 
     }

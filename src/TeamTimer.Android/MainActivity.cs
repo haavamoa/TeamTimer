@@ -20,6 +20,7 @@ namespace TeamTimer.Android
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.SetFlags("CollectionView_Experimental");
             Forms.Init(this, savedInstanceState);
+            FormsMaterial.Init(this, savedInstanceState);
             LoadApplication(new App());
         }
 

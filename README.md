@@ -7,4 +7,7 @@ substitute. The idea with this app is to manage this for you and keep track of w
 
 This app can be used for any team sport.
 
+Releases:
+https://play.google.com/store/apps/details?id=com.haavamoa.TeamTimer
+
 

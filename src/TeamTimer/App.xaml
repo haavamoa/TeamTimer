@@ -5,6 +5,7 @@
              x:Class="TeamTimer.App">
     <Application.Resources>
         <ResourceDictionary>
+            <!-- Colors, refactor if it grows any bigger-->
             <Color x:Key="ColorPrimary">#334955</Color>
             <Color x:Key="ColorPrimaryDark">#334955</Color>
             <Color x:Key="ColorAccent">#F9AA33</Color>
@@ -13,10 +14,17 @@
             <Color x:Key="NotSelectedListItemColor">#f2f2f2</Color>
             <Color x:Key="SelectedListItemColor">#d9e2d9</Color>
 
+            <!-- Styles, refactor if it grows any bigger -->
             <Style x:Key="ButtonStyle" TargetType="Button">
                 <Setter Property="BackgroundColor" Value="{StaticResource ColorPrimary}"/>
                 <Setter Property="CornerRadius" Value="18"/>
             </Style>
+
+            <!-- Using Fonts as Icons -->
+            <OnPlatform x:Key="MaterialFontFamily" x:TypeArguments="x:String">
+                <On Platform="iOS" Value="Material Design Icons" />
+                <On Platform="Android" Value="materialdesignicons-webfont.ttf#Material Design Icons" />
+            </OnPlatform>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

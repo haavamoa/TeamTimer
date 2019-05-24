@@ -32,7 +32,7 @@
                        FontSize="Medium"
                        FontAttributes="Bold"
                        TextColor="Black"
-                       HorizontalOptions="CenterAndExpand"/>
+                       HorizontalOptions="CenterAndExpand" />
             </StackLayout>
             <Frame.Triggers>
                 <DataTrigger TargetType="{Type Frame}"

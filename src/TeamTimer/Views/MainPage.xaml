@@ -4,6 +4,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:TeamTimer"
+             xmlns:Helpers="clr-namespace:TeamTimer.Helpers"
              x:Class="TeamTimer.Views.MainPage"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -108,18 +109,32 @@
                         <Grid Padding="5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Button Grid.Column="0"
                                     Command="{Binding DeletePlayerCommand}"
                                     Text="Remove"
                                     Scale="0.8"
                                     Style="{StaticResource ButtonStyle}" />
+                            <!-- Player icon -->
                             <Label Grid.Column="1"
+                                   FontFamily="{StaticResource MaterialFontFamily}"
+                                   Text="&#xf004;"
+                                   FontSize="25"
+                                   VerticalOptions="Center" />
+                            <Label Grid.Column="2"
                                    Text="{Binding Name}"
                                    FontSize="17"
                                    FontAttributes="Bold"
                                    VerticalOptions="Center" />
+                            <Label Grid.Column="3"
+                                   Text="Tap to mark as playing"
+                                   FontSize="15"
+                                   Opacity=".7"
+                                   VerticalOptions="Center" />
+                            
                             <Grid.Triggers>
                                 <DataTrigger TargetType="{x:Type Grid}"
                                              Binding="{Binding IsPlaying}" Value="True">

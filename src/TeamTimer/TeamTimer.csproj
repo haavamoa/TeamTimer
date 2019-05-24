@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Views\PlayerCardView.xaml">
+      <EmbeddedResource Update="Views\Player\PlayerCardView.xaml">
         <Generator>MSBuild:Compile</Generator>
         <SubType>Designer</SubType>
       </EmbeddedResource>

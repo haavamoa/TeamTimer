@@ -13,7 +13,6 @@ namespace TeamTimer.Views
             InitializeComponent();
 
             BindingContext = mainViewModel;
-            
         }
 
         private void OnPlayerAdded(object sender, EventArgs e)
@@ -30,7 +29,6 @@ namespace TeamTimer.Views
                     tappedPlayerViewModel.IsPlaying = !tappedPlayerViewModel.IsPlaying;
                 }
             }
-            
         }
     }
 }

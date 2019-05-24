@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -16,54 +15,26 @@ namespace TeamTimer.ViewModels
 {
     public class MatchViewModel : BaseViewModel, IMatchViewModel, IDisposable
     {
+        public Timer Timer { get; }
+        private bool m_isMatchStarted;
+        private int m_matchDurationSeconds;
+
         public MatchViewModel()
         {
             PlayingPlayers = new ObservableCollection<PlayerViewModel>();
             NonPlayingPlayers = new ObservableCollection<PlayerViewModel>();
             StartMatchCommand = new Command(StartMatch);
             PauseMatchCommand = new Command(PauseMatch);
-            MarkPlayerForSubCommand = new Command(MarkPlayerForSub);
-            m_timer = new Timer() { Interval = 1000 };
-            m_timer.Elapsed += OnEachMatchSecond;
-        }
-
-        private void PauseMatch()
-        {
-            m_timer.Enabled = false;
-            IsMatchStarted = false;
-        }
-
-        private void StartMatch()
-        {
-            m_timer.Enabled = true;
-            IsMatchStarted = true;
-        }
-
-        private void OnEachMatchSecond(object sender, ElapsedEventArgs e)
-        {
-            m_matchDurationSeconds += 1;
-            OnPropertyChanged(nameof(MatchDuration));
-
-            PlayingPlayers.ForEach(p => p.PlayTimeInSeconds += 1);
-            SortPlayingPlayers();
-        }
-
-        public string MatchDuration => TimeSpan.FromSeconds(m_matchDurationSeconds).ToShortForm();
-
-        private void SortPlayingPlayers()
-        {
-            PlayingPlayers = new ObservableCollection<PlayerViewModel>(PlayingPlayers.OrderByDescending(p => p.PlayTimeInSeconds));
-            OnPropertyChanged(nameof(PlayingPlayers));
+            Timer = new Timer() { Interval = 1000 };
+            Timer.Elapsed += OnEachMatchSecond;
         }
 
         private bool ShouldSubstitute => PlayingPlayers.Any(p => p.IsMarkedForSubstitution) && NonPlayingPlayers.Any(p => p.IsMarkedForSubstitution);
 
+        public string MatchDuration => TimeSpan.FromSeconds(m_matchDurationSeconds).ToShortForm();
+
         public ObservableCollection<PlayerViewModel> PlayingPlayers { get; private set; }
         public ObservableCollection<PlayerViewModel> NonPlayingPlayers { get; private set; }
-        public ICommand MarkPlayerForSubCommand { get; }
-        private bool m_isMatchStarted;
-        private readonly Timer m_timer;
-        private int m_matchDurationSeconds;
 
         public bool IsMatchStarted
         {
@@ -84,31 +55,81 @@ namespace TeamTimer.ViewModels
         public void UpdateMatchDuration(int seconds)
         {
             m_matchDurationSeconds += seconds;
-            PlayingPlayers.ForEach(p => p.PlayTimeInSeconds+=seconds);
+            PlayingPlayers.ForEach(p => p.PlayTimeInSeconds += seconds);
             OnPropertyChanged(nameof(PlayingPlayers));
             OnPropertyChanged(nameof(MatchDuration));
         }
 
-        public void OnSleep()
+        public void Dispose()
         {
-            m_timer.Enabled = false;
+            Timer.Elapsed -= OnEachMatchSecond;
         }
 
-        public void OnResume()
-        {
-            m_timer.Enabled = true;
-        }
 
-        private void MarkPlayerForSub(object obj)
+        public void OnPlayerChanged(PlayerViewModel changedPlayer)
         {
-            if (!(obj is PlayerViewModel player)) return;
+            if (PlayingPlayers.Contains(changedPlayer))
+            {
+                if (!changedPlayer.IsPlaying)
+                {
+                    PlayingPlayers.Remove(changedPlayer);
+                    NonPlayingPlayers.Add(changedPlayer);
 
-            if (PlayingPlayers.Contains(player))
-                DeMarkEveryoneExcept(PlayingPlayers, player);
+                    OnPropertyChanged(nameof(PlayingPlayers));
+                    OnPropertyChanged(nameof(NonPlayingPlayers));
+                }
+            }
             else
-                DeMarkEveryoneExcept(NonPlayingPlayers, player);
+            {
+                if (!changedPlayer.IsPlaying) return;
+                PlayingPlayers.Add(changedPlayer);
+                NonPlayingPlayers.Remove(changedPlayer);
 
-            player.IsMarkedForSubstitution = !player.IsMarkedForSubstitution;
+                OnPropertyChanged(nameof(PlayingPlayers));
+                OnPropertyChanged(nameof(NonPlayingPlayers));
+            }
+        }
+
+        public void OnPlayerMarkedForSub(PlayerViewModel markedPlayer)
+        {
+            MarkPlayerForSub(markedPlayer);
+        }
+
+        private void PauseMatch()
+        {
+            Timer.Enabled = false;
+            IsMatchStarted = false;
+        }
+
+        private void StartMatch()
+        {
+            Timer.Enabled = true;
+            IsMatchStarted = true;
+        }
+
+        private void OnEachMatchSecond(object sender, ElapsedEventArgs e)
+        {
+            m_matchDurationSeconds += 1;
+            OnPropertyChanged(nameof(MatchDuration));
+
+            PlayingPlayers.ForEach(p => p.PlayTimeInSeconds += 1);
+        }
+
+        private void SortPlayingPlayers()
+        {
+            PlayingPlayers = new ObservableCollection<PlayerViewModel>(PlayingPlayers.OrderByDescending(p => p.PlayTimeInSeconds));
+            OnPropertyChanged(nameof(PlayingPlayers));
+        }
+
+        private void MarkPlayerForSub(PlayerViewModel markedPlayer)
+        {
+
+            if (PlayingPlayers.Contains(markedPlayer))
+                DeMarkEveryoneExcept(PlayingPlayers, markedPlayer);
+            else
+                DeMarkEveryoneExcept(NonPlayingPlayers, markedPlayer);
+
+            markedPlayer.IsMarkedForSubstitution = !markedPlayer.IsMarkedForSubstitution;
 
             if (ShouldSubstitute) Substitute();
         }
@@ -146,11 +167,6 @@ namespace TeamTimer.ViewModels
                 OnPropertyChanged(nameof(PlayingPlayers));
                 OnPropertyChanged(nameof(NonPlayingPlayers));
             }
-        }
-
-        public void Dispose()
-        {
-            m_timer.Elapsed -= OnEachMatchSecond;
         }
     }
 }

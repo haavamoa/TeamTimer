@@ -1,25 +1,17 @@
-﻿<?xml version="1.0"
-      encoding="utf-8"?>
-
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:TeamTimer"
-             xmlns:Helpers="clr-namespace:TeamTimer.Helpers"
              x:Class="TeamTimer.Views.MainPage"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:dblend="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="dblend"
              dblend:DataContext="{dblend:DesignInstance ViewModels:IMainViewModel}"
              xmlns:ViewModels="clr-namespace:TeamTimer.ViewModels.Interfaces.ViewModels;assembly=TeamTimer"
-             xmlns:ViewModels1="clr-namespace:TeamTimer.ViewModels;assembly=TeamTimer"
              xmlns:Converters="clr-namespace:TeamTimer.Resources.Converters;assembly=TeamTimer"
              Title="Setup Team"
              Visual="Material">
     <ContentPage.ToolbarItems>
-        <ToolbarItem
-            Command="{Binding SaveTeamCommand}"
-            Text="Save" />
+        <ToolbarItem Command="{Binding SaveTeamCommand}"
+                     Text="Save" />
     </ContentPage.ToolbarItems>
     <Grid>
         <Grid.RowDefinitions>
@@ -28,7 +20,9 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <!-- Add new player Grid-->
-        <Grid Grid.Row="0" BackgroundColor="White" Padding="5">
+        <Grid Grid.Row="0"
+              BackgroundColor="White"
+              Padding="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -39,7 +33,7 @@
                    Placeholder="Player name"
                    Completed="OnPlayerAdded"
                    ReturnCommand="{Binding AddPlayerCommand}"
-                   Keyboard="Text"/>
+                   Keyboard="Text" />
             <Button Grid.Column="1"
                     Command="{Binding AddPlayerCommand}"
                     Text="Add"
@@ -96,7 +90,9 @@
                                 </DataTrigger>
                             </Label.Triggers>
                         </Label>
-                        <BoxView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"
+                        <BoxView Grid.Column="0"
+                                 Grid.ColumnSpan="2"
+                                 Grid.Row="1"
                                  HeightRequest=".1"
                                  BackgroundColor="{StaticResource ColorPrimaryDark}" />
                     </Grid>
@@ -134,11 +130,13 @@
                                    FontSize="15"
                                    Opacity=".7"
                                    VerticalOptions="Center" />
-                            
+
                             <Grid.Triggers>
                                 <DataTrigger TargetType="{x:Type Grid}"
-                                             Binding="{Binding IsPlaying}" Value="True">
-                                    <Setter Property="BackgroundColor" Value="{StaticResource SelectedListItemColor}" />
+                                             Binding="{Binding IsPlaying}"
+                                             Value="True">
+                                    <Setter Property="BackgroundColor"
+                                            Value="{StaticResource SelectedListItemColor}" />
 
                                 </DataTrigger>
                                 <DataTrigger TargetType="Grid"

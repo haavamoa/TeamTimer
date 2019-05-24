@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TeamTimer.Models;
 using TeamTimer.Resources.Commands;
+using TeamTimer.Services.Dialog.Interfaces;
 using TeamTimer.ViewModels.Base;
 using TeamTimer.ViewModels.Interfaces.Handlers;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
@@ -15,14 +15,16 @@ using Xamarin.Forms;
 
 namespace TeamTimer.ViewModels
 {
-    public class MainViewModel : BaseViewModel, IMainViewModel, IHandleTeam
+    public class MainViewModel : BaseViewModel, IMainViewModel, IHandleTeamSetup
     {
-        private string m_newPlayerName = string.Empty;
+        private readonly IDialogService m_dialogService;
         private INavigation? m_navigation;
+        private string m_newPlayerName = string.Empty;
 
-        public MainViewModel(IMatchViewModel matchViewModel)
+        public MainViewModel(IMatchViewModel matchViewModel, IDialogService dialogService)
         {
             MatchViewModel = matchViewModel;
+            m_dialogService = dialogService;
             SaveTeamCommand = new AsyncCommand(_ => SavePlayersAndNavigate(), _ => Players.Any(p => p.IsPlaying));
             AddPlayerCommand = new Command(AddPlayerOrPlayers, () => !string.IsNullOrEmpty(NewPlayerName));
             Players = new ObservableCollection<PlayerViewModel>();
@@ -46,7 +48,6 @@ namespace TeamTimer.ViewModels
         public ObservableCollection<PlayerViewModel> Players { get; private set; }
 
         public ICommand AddPlayerCommand { get; private set; }
-
 
         public ICommand SaveTeamCommand { get; private set; }
 
@@ -87,18 +88,17 @@ namespace TeamTimer.ViewModels
 
         private void AddPlayer(string newPlayerName)
         {
-            var newPlayer = new PlayerViewModel(new Player(newPlayerName));
-            newPlayer.Initialize(this);
+            var newPlayer = new PlayerViewModel(new Player(newPlayerName), this, MatchViewModel, m_dialogService);
             Players.Add(newPlayer);
             OnPropertyChanged(nameof(Players));
             ((AsyncCommand)SaveTeamCommand).ChangeCanExecute();
         }
 
-        private static bool IsMultipleNames(string newPlayerName, out List<PlayerViewModel> players)
+        private bool IsMultipleNames(string newPlayerName, out List<PlayerViewModel> players)
         {
             var newPlayerNames = newPlayerName.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             players = new List<PlayerViewModel>();
-            players.AddRange(newPlayerNames.Select(newPlayer => new PlayerViewModel(new Player(newPlayer))));
+            players.AddRange(newPlayerNames.Select(newPlayer => new PlayerViewModel(new Player(newPlayer), this, MatchViewModel, m_dialogService)));
             return players.Any();
         }
 

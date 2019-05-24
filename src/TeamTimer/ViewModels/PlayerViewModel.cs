@@ -1,8 +1,12 @@
 using System;
-using System.Diagnostics.Contracts;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using TeamTimer.Helpers;
 using TeamTimer.Models;
+using TeamTimer.Resources.Commands;
+using TeamTimer.Services.Dialog;
+using TeamTimer.Services.Dialog.Interfaces;
 using TeamTimer.ViewModels.Base;
 using TeamTimer.ViewModels.Interfaces.Handlers;
 using Xamarin.Forms;
@@ -11,16 +15,27 @@ namespace TeamTimer.ViewModels
 {
     public class PlayerViewModel : BaseViewModel
     {
+        private readonly IDialogService m_dialogService;
+        private readonly IHandleMatch m_matchHandler;
         private readonly Player m_player;
-        private IHandleTeam? m_teamHandler;
+        private readonly IHandleTeamSetup m_teamSetupHandler;
+        private bool m_isLocked;
+        private bool m_isMarkedForSubstitution;
         private bool m_isPlaying;
+        private int m_playTimeInSeconds;
 
-        public PlayerViewModel(Player player)
+        public PlayerViewModel(Player player, IHandleTeamSetup teamSetupHandler, IHandleMatch matchHandler, IDialogService dialogService)
         {
             m_player = player;
-            DeletePlayerCommand = new Command(_ => m_teamHandler?.OnPlayerDeleted(this));
+            m_teamSetupHandler = teamSetupHandler;
+            m_matchHandler = matchHandler;
+            m_dialogService = dialogService;
+            DeletePlayerCommand = new Command(_ => m_teamSetupHandler?.OnPlayerDeleted(this));
+            OpenInformationCommand = new AsyncCommand(_ => OpenInformation());
+            MarkedForSubstitutionCommand = new Command(() => m_matchHandler.OnPlayerMarkedForSub(this));
         }
 
+        public ICommand MarkedForSubstitutionCommand { get; private set; }
 
         public string Name => m_player.Name;
 
@@ -32,19 +47,16 @@ namespace TeamTimer.ViewModels
             set
             {
                 SetProperty(ref m_isPlaying, value);
-                m_teamHandler?.OnPlayerChanged(this);
+                m_teamSetupHandler.OnPlayerChanged(this);
+                m_matchHandler.OnPlayerChanged(this);
             }
         }
-
-        private bool m_isMarkedForSubstitution;
 
         public bool IsMarkedForSubstitution
         {
             get => m_isMarkedForSubstitution;
             set => SetProperty(ref m_isMarkedForSubstitution, value);
         }
-
-        private int m_playTimeInSeconds;
 
         public int PlayTimeInSeconds
         {
@@ -53,14 +65,33 @@ namespace TeamTimer.ViewModels
             {
                 SetProperty(ref m_playTimeInSeconds, value);
                 OnPropertyChanged(nameof(PlayTimeInString));
-            } 
+            }
         }
 
         public string PlayTimeInString => TimeSpan.FromSeconds(PlayTimeInSeconds).ToShortForm();
 
-        public void Initialize(IHandleTeam teamHandler)
+        public ICommand OpenInformationCommand { get; }
+
+        public bool IsLocked
         {
-            m_teamHandler = teamHandler;
+            get => m_isLocked;
+            set => SetProperty(ref m_isLocked, value);
+        }
+
+        private async Task OpenInformation()
+        {
+            IsMarkedForSubstitution = false;
+
+            var actions = new List<DialogAction>
+            {
+                !IsPlaying
+                    ? new DialogAction("Mark as playing", () => IsPlaying = true)
+                    : new DialogAction("Mark as non-playing", () => IsPlaying = false)
+                ,
+                new DialogAction("Lock player", () => IsLocked = true)
+            };
+
+            await m_dialogService.ShowActionSheet($"Options for {Name}", "Cancel", null, actions.ToArray());
         }
     }
 }

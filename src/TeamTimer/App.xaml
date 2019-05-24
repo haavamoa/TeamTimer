@@ -1,4 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0"
+      encoding="utf-8" ?>
 
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -15,15 +16,21 @@
             <Color x:Key="SelectedListItemColor">#d9e2d9</Color>
 
             <!-- Styles, refactor if it grows any bigger -->
-            <Style x:Key="ButtonStyle" TargetType="Button">
-                <Setter Property="BackgroundColor" Value="{StaticResource ColorPrimary}"/>
-                <Setter Property="CornerRadius" Value="18"/>
+            <Style x:Key="ButtonStyle"
+                   TargetType="Button">
+                <Setter Property="BackgroundColor"
+                        Value="{StaticResource ColorPrimary}" />
+                <Setter Property="CornerRadius"
+                        Value="18" />
             </Style>
 
             <!-- Using Fonts as Icons -->
-            <OnPlatform x:Key="MaterialFontFamily" x:TypeArguments="x:String">
-                <On Platform="iOS" Value="Material Design Icons" />
-                <On Platform="Android" Value="materialdesignicons-webfont.ttf#Material Design Icons" />
+            <OnPlatform x:Key="MaterialFontFamily"
+                        x:TypeArguments="x:String">
+                <On Platform="iOS"
+                    Value="Material Design Icons" />
+                <On Platform="Android"
+                    Value="materialdesignicons-webfont.ttf#Material Design Icons" />
             </OnPlatform>
         </ResourceDictionary>
     </Application.Resources>

@@ -1,18 +1,24 @@
 ﻿<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
-                    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:Effects="clr-namespace:TeamTimer.Effects;assembly=TeamTimer"
                     xmlns:Converters="clr-namespace:TeamTimer.Resources.Converters;assembly=TeamTimer">
     <DataTemplate x:Key="PlayerCardDataTemplate">
         <Frame Margin="5"
                CornerRadius="18"
                BorderColor="{StaticResource ColorPrimaryDark}">
             <StackLayout Orientation="Vertical"
-                         VerticalOptions="CenterAndExpand"
-                         HorizontalOptions="CenterAndExpand">
+                         VerticalOptions="FillAndExpand"
+                         HorizontalOptions="FillAndExpand"
+                         Effects:TapOrTapAndHoldEffect.TapAndHoldCommand="{Binding OpenInformationCommand}"
+                         Effects:TapOrTapAndHoldEffect.TapCommand="{Binding MarkedForSubstitutionCommand}">
+                <StackLayout.Effects>
+                    <Effects:TapOrTapAndHoldEffect />
+                </StackLayout.Effects>
                 <Label Text="{Binding Name}"
                        TextColor="Black"
                        FontSize="Medium"
                        HorizontalOptions="CenterAndExpand">
+
                     <Label.Triggers>
                         <DataTrigger TargetType="{x:Type Label}"
                                      Binding="{Binding IsMarkedForSubstitution}"

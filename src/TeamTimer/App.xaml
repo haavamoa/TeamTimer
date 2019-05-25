@@ -14,6 +14,7 @@
             <Color x:Key="RedLight">#f7eeee</Color>
             <Color x:Key="NotSelectedListItemColor">#f2f2f2</Color>
             <Color x:Key="SelectedListItemColor">#d9e2d9</Color>
+            <Color x:Key="LockedPlayerColor">#76736f</Color>
 
             <!-- Styles, refactor if it grows any bigger -->
             <Style x:Key="ButtonStyle"

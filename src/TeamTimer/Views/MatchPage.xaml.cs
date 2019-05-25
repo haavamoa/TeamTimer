@@ -32,10 +32,5 @@ namespace TeamTimer.Views
             ((FlowListView)playingPlayers).FlowColumnCount = (int)deviceWidth / 250;
             ((FlowListView)nonPlayingPlayers).FlowColumnCount = (int)deviceWidth / 250;
         }
-
-        private void PlayingPlayers_OnFlowItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

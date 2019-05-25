@@ -32,7 +32,15 @@ namespace TeamTimer.ViewModels
             m_dialogService = dialogService;
             DeletePlayerCommand = new Command(_ => m_teamSetupHandler?.OnPlayerDeleted(this));
             OpenInformationCommand = new AsyncCommand(_ => OpenInformation());
-            MarkedForSubstitutionCommand = new Command(() => m_matchHandler.OnPlayerMarkedForSub(this));
+            MarkedForSubstitutionCommand = new Command(MarkForSubstitution);
+        }
+
+        private void MarkForSubstitution()
+        {
+            if (!IsLocked)
+            {
+                m_matchHandler.OnPlayerMarkedForSub(this);
+            }
         }
 
         public ICommand MarkedForSubstitutionCommand { get; private set; }
@@ -88,7 +96,9 @@ namespace TeamTimer.ViewModels
                     ? new DialogAction("Mark as playing", () => IsPlaying = true)
                     : new DialogAction("Mark as non-playing", () => IsPlaying = false)
                 ,
-                new DialogAction("Lock player", () => IsLocked = true)
+                !IsLocked
+                ? new DialogAction("Lock player", () => IsLocked = true)
+                : new DialogAction("Unlock player", () => IsLocked = false)
             };
 
             await m_dialogService.ShowActionSheet($"Options for {Name}", "Cancel", null, actions.ToArray());

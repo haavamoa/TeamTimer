@@ -5,7 +5,8 @@
     <DataTemplate x:Key="PlayerCardDataTemplate">
         <Frame Margin="5"
                CornerRadius="18"
-               BorderColor="{StaticResource ColorPrimaryDark}">
+               BorderColor="{StaticResource ColorPrimaryDark}"
+        >
             <StackLayout Orientation="Vertical"
                          VerticalOptions="FillAndExpand"
                          HorizontalOptions="FillAndExpand"
@@ -14,26 +15,40 @@
                 <StackLayout.Effects>
                     <Effects:TapOrTapAndHoldEffect />
                 </StackLayout.Effects>
-                <Label Text="{Binding Name}"
-                       TextColor="Black"
-                       FontSize="Medium"
-                       HorizontalOptions="CenterAndExpand">
 
-                    <Label.Triggers>
-                        <DataTrigger TargetType="{x:Type Label}"
-                                     Binding="{Binding IsMarkedForSubstitution}"
-                                     Value="true">
-                            <Setter Property="FontAttributes"
-                                    Value="Bold" />
-                        </DataTrigger>
-                        <DataTrigger TargetType="{x:Type Label}"
-                                     Binding="{Binding IsMarkedForSubstitution}"
-                                     Value="false">
-                            <Setter Property="FontAttributes"
-                                    Value="None" />
-                        </DataTrigger>
-                    </Label.Triggers>
-                </Label>
+                <StackLayout Orientation="Horizontal">
+                    <Label FontFamily="{StaticResource MaterialFontFamily}"
+                           Text="&#xf341;"
+                           FontSize="Large"
+                           TextColor="{StaticResource RedLight}"
+                           IsVisible="{Binding IsLocked}"
+                    />
+                    <Label Text="{Binding Name}"
+                           TextColor="Black"
+                           FontSize="Medium"
+                           HorizontalOptions="CenterAndExpand">
+
+                        <Label.Triggers>
+                            <DataTrigger TargetType="{x:Type Label}"
+                                         Binding="{Binding IsMarkedForSubstitution}"
+                                         Value="true">
+                                <Setter Property="FontAttributes"
+                                        Value="Bold" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="{x:Type Label}"
+                                         Binding="{Binding IsMarkedForSubstitution}"
+                                         Value="false">
+                                <Setter Property="FontAttributes"
+                                        Value="None" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="{x:Type Label}"
+                                         Binding="{Binding IsLocked}"
+                                         Value="True">
+                                <Setter Property="TextColor" Value="{StaticResource RedLight}"/>
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                </StackLayout>
                 <Label Text="{Binding PlayTimeInSeconds, Converter={Converters:SecondsToStringShortFormatConverter}}"
                        FontSize="Medium"
                        FontAttributes="Bold"
@@ -52,6 +67,13 @@
                              Value="False">
                     <Setter Property="BackgroundColor"
                             Value="{StaticResource NotSelectedListItemColor}" />
+                </DataTrigger>
+                <DataTrigger TargetType="{Type Frame}"
+                             Binding="{Binding IsLocked}"
+                             Value="True">
+                    <Setter Property="BackgroundColor"
+                            Value="{StaticResource LockedPlayerColor}"/>
+                    <Setter Property="Opacity" Value="0.5" />
                 </DataTrigger>
             </Frame.Triggers>
         </Frame>

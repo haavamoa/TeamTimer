@@ -115,12 +115,6 @@ namespace TeamTimer.ViewModels
             PlayingPlayers.ForEach(p => p.PlayTimeInSeconds += 1);
         }
 
-        private void SortPlayingPlayers()
-        {
-            PlayingPlayers = new ObservableCollection<PlayerViewModel>(PlayingPlayers.OrderByDescending(p => p.PlayTimeInSeconds));
-            OnPropertyChanged(nameof(PlayingPlayers));
-        }
-
         private void MarkPlayerForSub(PlayerViewModel markedPlayer)
         {
 
@@ -141,29 +135,35 @@ namespace TeamTimer.ViewModels
 
         private void Substitute()
         {
+            var tempPlayingPlayers = PlayingPlayers.ToList();
+            var tempNonPlayingPlayers = NonPlayingPlayers.ToList();
             PlayerViewModel? playingPlayerToSub = null;
-            foreach (var playingPlayer in PlayingPlayers)
+            foreach (var playingPlayer in tempPlayingPlayers)
                 if (playingPlayer.IsMarkedForSubstitution)
                     playingPlayerToSub = playingPlayer;
 
             PlayerViewModel? nonPlayingPlayerToSub = null;
-            foreach (var nonPlayingPlayer in NonPlayingPlayers)
+            foreach (var nonPlayingPlayer in tempNonPlayingPlayers)
                 if (nonPlayingPlayer.IsMarkedForSubstitution)
                     nonPlayingPlayerToSub = nonPlayingPlayer;
 
             if (playingPlayerToSub != null && nonPlayingPlayerToSub != null)
             {
-                PlayingPlayers.Remove(playingPlayerToSub);
-                NonPlayingPlayers.Remove(nonPlayingPlayerToSub);
+                tempPlayingPlayers.Remove(playingPlayerToSub);
+                tempNonPlayingPlayers.Remove(nonPlayingPlayerToSub);
 
-                PlayingPlayers.Add(nonPlayingPlayerToSub);
-                NonPlayingPlayers.Add(playingPlayerToSub);
+                tempPlayingPlayers.Add(nonPlayingPlayerToSub);
+                tempNonPlayingPlayers.Add(playingPlayerToSub);
 
                 playingPlayerToSub.IsMarkedForSubstitution = false;
                 nonPlayingPlayerToSub.IsMarkedForSubstitution = false;
 
-                SortPlayingPlayers();
+                tempPlayingPlayers.OrderByPlayTime();
+                tempPlayingPlayers.MoveLockedToEnd();
+                tempNonPlayingPlayers.MoveLockedToEnd();
 
+                PlayingPlayers = new ObservableCollection<PlayerViewModel>(tempPlayingPlayers);
+                NonPlayingPlayers = new ObservableCollection<PlayerViewModel>(tempNonPlayingPlayers);
                 OnPropertyChanged(nameof(PlayingPlayers));
                 OnPropertyChanged(nameof(NonPlayingPlayers));
             }

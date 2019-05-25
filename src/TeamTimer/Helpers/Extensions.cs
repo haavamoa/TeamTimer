@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using TeamTimer.ViewModels;
 
 namespace TeamTimer.Helpers
 {
@@ -21,6 +24,18 @@ namespace TeamTimer.Helpers
                 shortForm += string.Format("{0}s", t.Seconds.ToString());
             }
             return shortForm;
+        }
+
+        public static void OrderByPlayTime(this List<PlayerViewModel> listToOrderBy)
+        {
+            listToOrderBy.OrderByDescending(p => p.PlayTimeInSeconds).ToList();
+        }
+
+        public static void MoveLockedToEnd(this List<PlayerViewModel> listToMoveIn)
+        {
+            var lockedPlayers = listToMoveIn.Where(p => p.IsLocked).ToList();
+            lockedPlayers.ForEach(lp => listToMoveIn.Remove(lp));
+            lockedPlayers.ForEach(listToMoveIn.Add);
         }
     }
 }

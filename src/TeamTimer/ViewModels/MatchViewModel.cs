@@ -18,11 +18,13 @@ namespace TeamTimer.ViewModels
         public Timer Timer { get; }
         private bool m_isMatchStarted;
         private int m_matchDurationSeconds;
+        private ObservableCollection<PlayerViewModel> m_playingPlayers;
+        private ObservableCollection<PlayerViewModel> m_nonPlayingPlayers;
 
         public MatchViewModel()
         {
-            PlayingPlayers = new ObservableCollection<PlayerViewModel>();
-            NonPlayingPlayers = new ObservableCollection<PlayerViewModel>();
+            m_playingPlayers = new ObservableCollection<PlayerViewModel>();
+            m_nonPlayingPlayers = new ObservableCollection<PlayerViewModel>();
             StartMatchCommand = new Command(StartMatch);
             PauseMatchCommand = new Command(PauseMatch);
             Timer = new Timer() { Interval = 1000 };
@@ -33,8 +35,17 @@ namespace TeamTimer.ViewModels
 
         public string MatchDuration => TimeSpan.FromSeconds(m_matchDurationSeconds).ToShortForm();
 
-        public ObservableCollection<PlayerViewModel> PlayingPlayers { get; private set; }
-        public ObservableCollection<PlayerViewModel> NonPlayingPlayers { get; private set; }
+        public ObservableCollection<PlayerViewModel> PlayingPlayers
+        {
+            get => m_playingPlayers;
+            set => SetProperty(ref m_playingPlayers, value);
+        }
+
+        public ObservableCollection<PlayerViewModel> NonPlayingPlayers
+        {
+            get => m_nonPlayingPlayers;
+            set => SetProperty(ref m_nonPlayingPlayers, value);
+        }
 
         public bool IsMatchStarted
         {
@@ -74,9 +85,6 @@ namespace TeamTimer.ViewModels
                 {
                     PlayingPlayers.Remove(changedPlayer);
                     NonPlayingPlayers.Add(changedPlayer);
-
-                    OnPropertyChanged(nameof(PlayingPlayers));
-                    OnPropertyChanged(nameof(NonPlayingPlayers));
                 }
             }
             else
@@ -84,10 +92,17 @@ namespace TeamTimer.ViewModels
                 if (!changedPlayer.IsPlaying) return;
                 PlayingPlayers.Add(changedPlayer);
                 NonPlayingPlayers.Remove(changedPlayer);
-
-                OnPropertyChanged(nameof(PlayingPlayers));
-                OnPropertyChanged(nameof(NonPlayingPlayers));
             }
+
+            var tempPlayingPlayers = PlayingPlayers.ToList();
+            var tempNonPlayingPlayers = NonPlayingPlayers.ToList();
+
+            tempPlayingPlayers = tempPlayingPlayers.OrderByDescending(p => p.PlayTimeInSeconds).ToList();
+            tempPlayingPlayers.MoveLockedToEnd();
+            tempNonPlayingPlayers.MoveLockedToEnd();
+
+            PlayingPlayers = new ObservableCollection<PlayerViewModel>(tempPlayingPlayers);
+            NonPlayingPlayers = new ObservableCollection<PlayerViewModel>(tempNonPlayingPlayers);
         }
 
         public void OnPlayerMarkedForSub(PlayerViewModel markedPlayer)
@@ -158,14 +173,12 @@ namespace TeamTimer.ViewModels
                 playingPlayerToSub.IsMarkedForSubstitution = false;
                 nonPlayingPlayerToSub.IsMarkedForSubstitution = false;
 
-                tempPlayingPlayers.OrderByPlayTime();
+                tempPlayingPlayers = tempPlayingPlayers.OrderByDescending(p => p.PlayTimeInSeconds).ToList();
                 tempPlayingPlayers.MoveLockedToEnd();
                 tempNonPlayingPlayers.MoveLockedToEnd();
 
                 PlayingPlayers = new ObservableCollection<PlayerViewModel>(tempPlayingPlayers);
                 NonPlayingPlayers = new ObservableCollection<PlayerViewModel>(tempNonPlayingPlayers);
-                OnPropertyChanged(nameof(PlayingPlayers));
-                OnPropertyChanged(nameof(NonPlayingPlayers));
             }
         }
     }

@@ -83,7 +83,11 @@ namespace TeamTimer.ViewModels
         public bool IsLocked
         {
             get => m_isLocked;
-            set => SetProperty(ref m_isLocked, value);
+            set
+            {
+                SetProperty(ref m_isLocked, value);
+                m_matchHandler.OnPlayerChanged(this);
+            }
         }
 
         private async Task OpenInformation()

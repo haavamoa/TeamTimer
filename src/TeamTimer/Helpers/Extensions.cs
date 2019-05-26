@@ -26,11 +26,6 @@ namespace TeamTimer.Helpers
             return shortForm;
         }
 
-        public static void OrderByPlayTime(this List<PlayerViewModel> listToOrderBy)
-        {
-            listToOrderBy.OrderByDescending(p => p.PlayTimeInSeconds).ToList();
-        }
-
         public static void MoveLockedToEnd(this List<PlayerViewModel> listToMoveIn)
         {
             var lockedPlayers = listToMoveIn.Where(p => p.IsLocked).ToList();

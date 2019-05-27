@@ -11,7 +11,8 @@
                          VerticalOptions="FillAndExpand"
                          HorizontalOptions="FillAndExpand"
                          Effects:TapOrTapAndHoldEffect.TapAndHoldCommand="{Binding OpenInformationCommand}"
-                         Effects:TapOrTapAndHoldEffect.TapCommand="{Binding MarkedForSubstitutionCommand}">
+                         Effects:TapOrTapAndHoldEffect.TapCommand="{Binding MarkedForSubstitutionCommand}"
+                         >
                 <StackLayout.Effects>
                     <Effects:TapOrTapAndHoldEffect />
                 </StackLayout.Effects>

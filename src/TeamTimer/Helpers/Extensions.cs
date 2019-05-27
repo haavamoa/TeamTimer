@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TeamTimer.ViewModels;
+using Xamarin.Forms.Internals;
 
 namespace TeamTimer.Helpers
 {
@@ -31,6 +32,11 @@ namespace TeamTimer.Helpers
             var lockedPlayers = listToMoveIn.Where(p => p.IsLocked).ToList();
             lockedPlayers.ForEach(lp => listToMoveIn.Remove(lp));
             lockedPlayers.ForEach(listToMoveIn.Add);
+        }
+        
+        public static void DeMarkEveryoneExcept(this IEnumerable<PlayerViewModel> listOfPlayers, PlayerViewModel thePlayerToIgnore)
+        {
+            listOfPlayers.Where(p => !p.Equals(thePlayerToIgnore)).ForEach(p => p.IsMarkedForSubstitution = false);
         }
     }
 }

@@ -15,11 +15,10 @@ namespace TeamTimer.ViewModels
 {
     public class MatchViewModel : BaseViewModel, IMatchViewModel, IDisposable
     {
-        public Timer Timer { get; }
         private bool m_isMatchStarted;
         private int m_matchDurationSeconds;
-        private ObservableCollection<PlayerViewModel> m_playingPlayers;
         private ObservableCollection<PlayerViewModel> m_nonPlayingPlayers;
+        private ObservableCollection<PlayerViewModel> m_playingPlayers;
 
         public MatchViewModel()
         {
@@ -32,6 +31,7 @@ namespace TeamTimer.ViewModels
         }
 
         private bool ShouldSubstitute => PlayingPlayers.Any(p => p.IsMarkedForSubstitution) && NonPlayingPlayers.Any(p => p.IsMarkedForSubstitution);
+        public Timer Timer { get; }
 
         public string MatchDuration => TimeSpan.FromSeconds(m_matchDurationSeconds).ToShortForm();
 
@@ -58,7 +58,10 @@ namespace TeamTimer.ViewModels
 
         public Task Initialize(List<PlayerViewModel> playingPlayers, List<PlayerViewModel> nonPlayingPlayers)
         {
-            PlayingPlayers = new ObservableCollection<PlayerViewModel>(playingPlayers);
+            var orderedPlayingPlayers = playingPlayers.OrderByDescending(p => p.PlayTimeInSeconds).ToList();
+            orderedPlayingPlayers.MoveLockedToEnd();
+            PlayingPlayers = new ObservableCollection<PlayerViewModel>(orderedPlayingPlayers);
+            nonPlayingPlayers.MoveLockedToEnd();
             NonPlayingPlayers = new ObservableCollection<PlayerViewModel>(nonPlayingPlayers);
             return Task.CompletedTask;
         }
@@ -76,26 +79,27 @@ namespace TeamTimer.ViewModels
             Timer.Elapsed -= OnEachMatchSecond;
         }
 
-
         public void OnPlayerChanged(PlayerViewModel changedPlayer)
         {
-            if (PlayingPlayers.Contains(changedPlayer))
+            var tempPlayingPlayers = PlayingPlayers.ToList();
+            var tempNonPlayingPlayers = NonPlayingPlayers.ToList();
+
+            if (tempPlayingPlayers.Contains(changedPlayer))
             {
                 if (!changedPlayer.IsPlaying)
                 {
-                    PlayingPlayers.Remove(changedPlayer);
-                    NonPlayingPlayers.Add(changedPlayer);
+                    tempPlayingPlayers.Remove(changedPlayer);
+                    tempNonPlayingPlayers.Add(changedPlayer);
                 }
             }
             else
             {
-                if (!changedPlayer.IsPlaying) return;
-                PlayingPlayers.Add(changedPlayer);
-                NonPlayingPlayers.Remove(changedPlayer);
+                if (changedPlayer.IsPlaying)
+                {
+                    tempPlayingPlayers.Add(changedPlayer);
+                    tempNonPlayingPlayers.Remove(changedPlayer);
+                }
             }
-
-            var tempPlayingPlayers = PlayingPlayers.ToList();
-            var tempNonPlayingPlayers = NonPlayingPlayers.ToList();
 
             tempPlayingPlayers = tempPlayingPlayers.OrderByDescending(p => p.PlayTimeInSeconds).ToList();
             tempPlayingPlayers.MoveLockedToEnd();
@@ -126,26 +130,35 @@ namespace TeamTimer.ViewModels
         {
             m_matchDurationSeconds += 1;
             OnPropertyChanged(nameof(MatchDuration));
-
-            PlayingPlayers.ForEach(p => p.PlayTimeInSeconds += 1);
+            
+            var tempPlayingPlayers = PlayingPlayers.ToList();
+            tempPlayingPlayers.ForEach(p => p.PlayTimeInSeconds += 1);
+            PlayingPlayers = new ObservableCollection<PlayerViewModel>(tempPlayingPlayers);
         }
 
         private void MarkPlayerForSub(PlayerViewModel markedPlayer)
         {
-
-            if (PlayingPlayers.Contains(markedPlayer))
-                DeMarkEveryoneExcept(PlayingPlayers, markedPlayer);
+            var tempPlayingPlayers = PlayingPlayers.ToList();
+            var tempNonPlayingPlayers = NonPlayingPlayers.ToList();
+            
+            if (tempPlayingPlayers.Contains(markedPlayer))
+            {
+                tempPlayingPlayers.DeMarkEveryoneExcept(markedPlayer);
+            }
             else
-                DeMarkEveryoneExcept(NonPlayingPlayers, markedPlayer);
+            {
+                tempNonPlayingPlayers.DeMarkEveryoneExcept(markedPlayer);
+            }
 
             markedPlayer.IsMarkedForSubstitution = !markedPlayer.IsMarkedForSubstitution;
 
-            if (ShouldSubstitute) Substitute();
-        }
-
-        private static void DeMarkEveryoneExcept(IEnumerable<PlayerViewModel> listOfPlayers, PlayerViewModel thePlayerToIgnore)
-        {
-            listOfPlayers.Where(p => !p.Equals(thePlayerToIgnore)).ForEach(p => p.IsMarkedForSubstitution = false);
+            PlayingPlayers = new ObservableCollection<PlayerViewModel>(tempPlayingPlayers);
+            NonPlayingPlayers = new ObservableCollection<PlayerViewModel>(tempNonPlayingPlayers);
+            
+            if (ShouldSubstitute)
+            {
+                Substitute();
+            }
         }
 
         private void Substitute()
@@ -168,10 +181,13 @@ namespace TeamTimer.ViewModels
                 tempNonPlayingPlayers.Remove(nonPlayingPlayerToSub);
 
                 tempPlayingPlayers.Add(nonPlayingPlayerToSub);
+
                 tempNonPlayingPlayers.Add(playingPlayerToSub);
 
                 playingPlayerToSub.IsMarkedForSubstitution = false;
                 nonPlayingPlayerToSub.IsMarkedForSubstitution = false;
+                playingPlayerToSub.IsPlaying = false;
+                nonPlayingPlayerToSub.IsPlaying = true;
 
                 tempPlayingPlayers = tempPlayingPlayers.OrderByDescending(p => p.PlayTimeInSeconds).ToList();
                 tempPlayingPlayers.MoveLockedToEnd();

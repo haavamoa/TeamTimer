@@ -34,5 +34,7 @@ namespace TeamTimer.Views
                 }
             }
         }
+
+        protected override bool OnBackButtonPressed() => true;
     }
 }

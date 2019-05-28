@@ -10,11 +10,11 @@
              Title="Setup Team"
              Visual="Material">
     <ContentPage.Resources>
-        <ResourceDictionary Source="Player/PlayerInList.xaml"/>
+        <ResourceDictionary Source="Player/PlayerInList.xaml" />
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding SaveTeamCommand}"
-                     Text="Save" />
+                     Text="Start" />
     </ContentPage.ToolbarItems>
     <Grid Padding="10">
         <Grid.RowDefinitions>
@@ -24,8 +24,7 @@
         </Grid.RowDefinitions>
         <!-- Add new player Grid-->
         <Grid Grid.Row="0"
-              BackgroundColor="White"
-              >
+              BackgroundColor="White">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -43,8 +42,9 @@
                     Style="{StaticResource ButtonStyle}"
                     Clicked="OnPlayerAdded" />
         </Grid>
-        
-        <Grid Grid.Row="1" IsVisible="{Binding Players, Converter={Converters:IsListEmptyConverter Inverted=True}}">
+
+        <Grid Grid.Row="1"
+              IsVisible="{Binding Players, Converter={Converters:IsListEmptyConverter Inverted=True}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -86,8 +86,6 @@
                         SelectionMode="Multiple"
                         ItemTemplate="{StaticResource PlayerInListDataTemplate}"
                         EmptyView="Team is empty, please add players"
-                        SelectionChanged="OnSelectionChanged"
-                        
-        />
+                        SelectionChanged="OnSelectionChanged" />
     </Grid>
 </ContentPage>

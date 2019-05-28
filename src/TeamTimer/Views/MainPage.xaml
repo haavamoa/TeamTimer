@@ -86,6 +86,7 @@
                         SelectionMode="Multiple"
                         ItemTemplate="{StaticResource PlayerInListDataTemplate}"
                         EmptyView="Team is empty, please add players"
-                        SelectionChanged="OnSelectionChanged" />
+                        SelectionChanged="OnSelectionChanged"
+                        />
     </Grid>
 </ContentPage>

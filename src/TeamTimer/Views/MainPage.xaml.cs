@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using TeamTimer.ViewModels;
-using TeamTimer.ViewModels.Interfaces;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
 using Xamarin.Forms;
-using Xamarin.Forms.Internals;
 
 namespace TeamTimer.Views
 {
@@ -25,13 +22,29 @@ namespace TeamTimer.Views
 
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var firstItem = e.CurrentSelection.LastOrDefault();
-            if (firstItem != null)
+            var previous = e.PreviousSelection;
+            var current = e.CurrentSelection;
+
+            foreach (PlayerViewModel potentialDeSelectedPlayer in previous)
             {
-                if (firstItem is PlayerViewModel selectedPlayer)
+                if (current.Contains(potentialDeSelectedPlayer))
                 {
-                    selectedPlayer.IsPlaying = !selectedPlayer.IsPlaying;
+                    continue;
                 }
+
+                potentialDeSelectedPlayer.IsPlaying = false;
+                return;
+            }
+
+            var lastSelected = current.LastOrDefault();
+            if (lastSelected == null)
+            {
+                return;
+            }
+
+            if (lastSelected is PlayerViewModel selectedPlayer)
+            {
+                selectedPlayer.IsPlaying = true;
             }
         }
 

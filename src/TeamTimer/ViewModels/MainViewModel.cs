@@ -28,7 +28,9 @@ namespace TeamTimer.ViewModels
             SaveTeamCommand = new AsyncCommand(_ => SavePlayersAndNavigate(), _ => Players.Any(p => p.IsPlaying));
             AddPlayerCommand = new Command(AddPlayerOrPlayers, () => !string.IsNullOrEmpty(NewPlayerName));
             Players = new ObservableCollection<PlayerViewModel>();
+            PlayingPlayers = new ObservableCollection<PlayerViewModel>();
         }
+
 
         public void OnPlayerDeleted(PlayerViewModel deletedPlayer)
         {
@@ -66,6 +68,7 @@ namespace TeamTimer.ViewModels
         }
 
         public IMatchViewModel MatchViewModel { get; }
+        public ObservableCollection<PlayerViewModel> PlayingPlayers { get; }
 
         private void AddPlayerOrPlayers()
         {

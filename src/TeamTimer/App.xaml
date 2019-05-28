@@ -22,7 +22,8 @@
                 <Setter Property="BackgroundColor"
                         Value="{StaticResource ColorPrimary}" />
                 <Setter Property="CornerRadius"
-                        Value="18" />
+                        Value="10" />
+                <Setter Property="TextColor" Value="White"/>
             </Style>
 
             <!-- Using Fonts as Icons -->

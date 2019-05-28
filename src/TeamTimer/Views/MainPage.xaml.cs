@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using TeamTimer.ViewModels;
 using TeamTimer.ViewModels.Interfaces;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
 namespace TeamTimer.Views
 {
@@ -20,13 +23,14 @@ namespace TeamTimer.Views
             NewPlayerEntry.Focus();
         }
 
-        private void OnViewCellTapped(object sender, EventArgs e)
+        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (sender is ViewCell tappedViewCell)
+            var firstItem = e.CurrentSelection.LastOrDefault();
+            if (firstItem != null)
             {
-                if (tappedViewCell.BindingContext is PlayerViewModel tappedPlayerViewModel)
+                if (firstItem is PlayerViewModel selectedPlayer)
                 {
-                    tappedPlayerViewModel.IsPlaying = !tappedPlayerViewModel.IsPlaying;
+                    selectedPlayer.IsPlaying = !selectedPlayer.IsPlaying;
                 }
             }
         }

@@ -9,20 +9,23 @@
              xmlns:Converters="clr-namespace:TeamTimer.Resources.Converters;assembly=TeamTimer"
              Title="Setup Team"
              Visual="Material">
+    <ContentPage.Resources>
+        <ResourceDictionary Source="Player/PlayerInList.xaml"/>
+    </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding SaveTeamCommand}"
                      Text="Save" />
     </ContentPage.ToolbarItems>
-    <Grid>
+    <Grid Padding="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <!-- Add new player Grid-->
         <Grid Grid.Row="0"
               BackgroundColor="White"
-              Padding="5">
+              >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -40,117 +43,51 @@
                     Style="{StaticResource ButtonStyle}"
                     Clicked="OnPlayerAdded" />
         </Grid>
-        <!-- Team is empty label -->
-        <Label x:Name="EmptyTeamLabel"
-               Text="Team is empty, please add players"
-               Grid.Row="1"
-               IsVisible="{Binding Players, Converter={Converters:IsListEmptyConverter}}"
-               HorizontalOptions="CenterAndExpand"
-               VerticalOptions="CenterAndExpand" />
+        
+        <Grid Grid.Row="1" IsVisible="{Binding Players, Converter={Converters:IsListEmptyConverter Inverted=True}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="1" />
+            </Grid.RowDefinitions>
+            <Label Grid.Column="0"
+                   Grid.Row="0"
+                   Text="{Binding Players.Count, StringFormat='{0} total players'}"
+                   VerticalOptions="End"
+                   Opacity=".7" />
+            <Label Grid.Column="1"
+                   Grid.Row="0"
+                   VerticalOptions="End"
+                   Opacity=".7"
+                   Text="{Binding NumberOfStartingPlayers, StringFormat='{0} will start playing'}">
+                <Label.Triggers>
+                    <DataTrigger TargetType="{x:Type Label}"
+                                 Binding="{Binding NumberOfStartingPlayers}"
+                                 Value="0">
+                        <Setter Property="TextColor"
+                                Value="Red" />
+                        <Setter Property="FontAttributes"
+                                Value="Bold" />
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
+            <BoxView Grid.Column="0"
+                     Grid.ColumnSpan="2"
+                     Grid.Row="1"
+                     HeightRequest=".1"
+                     BackgroundColor="{StaticResource ColorPrimaryDark}" />
+        </Grid>
         <!--Team list-->
-        <ListView Grid.Row="1"
-                  ItemsSource="{Binding Players}"
-                  HasUnevenRows="True"
-                  Header="{Binding .}"
-                  SelectionMode="None"
-                  Margin="5"
-                  IsVisible="{Binding Source={x:Reference EmptyTeamLabel}, Path=IsVisible, Converter={Converters:InvertedBoolConverter}}"
-                  SeparatorColor="{StaticResource ColorPrimaryDark}"
-                  SeparatorVisibility="Default">
-            <!-- Header of team list -->
-            <ListView.HeaderTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="1" />
-                        </Grid.RowDefinitions>
-                        <Label Grid.Column="0"
-                               Grid.Row="0"
-                               Text="{Binding Players.Count, StringFormat='{0} total players'}"
-                               VerticalOptions="End"
-                               Opacity=".7" />
-                        <Label Grid.Column="1"
-                               Grid.Row="0"
-                               VerticalOptions="End"
-                               Opacity=".7"
-                               Text="{Binding NumberOfStartingPlayers, StringFormat='{0} will start playing'}">
-                            <Label.Triggers>
-                                <DataTrigger TargetType="{x:Type Label}"
-                                             Binding="{Binding NumberOfStartingPlayers}"
-                                             Value="0">
-                                    <Setter Property="TextColor"
-                                            Value="Red" />
-                                    <Setter Property="FontAttributes"
-                                            Value="Bold" />
-                                </DataTrigger>
-                            </Label.Triggers>
-                        </Label>
-                        <BoxView Grid.Column="0"
-                                 Grid.ColumnSpan="2"
-                                 Grid.Row="1"
-                                 HeightRequest=".1"
-                                 BackgroundColor="{StaticResource ColorPrimaryDark}" />
-                    </Grid>
-                </DataTemplate>
-            </ListView.HeaderTemplate>
-            <!-- Each player in team lits -->
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell Tapped="OnViewCellTapped">
-                        <Grid Padding="5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0"
-                                    Command="{Binding DeletePlayerCommand}"
-                                    Text="Remove"
-                                    Scale="0.8"
-                                    Style="{StaticResource ButtonStyle}" />
-                            <!-- Player icon -->
-                            <Label Grid.Column="1"
-                                   FontFamily="{StaticResource MaterialFontFamily}"
-                                   Text="&#xf004;"
-                                   FontSize="25"
-                                   VerticalOptions="Center" />
-                            <Label Grid.Column="2"
-                                   Text="{Binding Name}"
-                                   FontSize="17"
-                                   FontAttributes="Bold"
-                                   VerticalOptions="Center" />
-                            <Label Grid.Column="3"
-                                   Text="Tap to mark as playing"
-                                   FontSize="15"
-                                   Opacity=".7"
-                                   VerticalOptions="Center" />
-
-                            <Grid.Triggers>
-                                <DataTrigger TargetType="{x:Type Grid}"
-                                             Binding="{Binding IsPlaying}"
-                                             Value="True">
-                                    <Setter Property="BackgroundColor"
-                                            Value="{StaticResource SelectedListItemColor}" />
-
-                                </DataTrigger>
-                                <DataTrigger TargetType="Grid"
-                                             Binding="{Binding IsPlaying}"
-                                             Value="False">
-                                    <Setter Property="BackgroundColor"
-                                            Value="{StaticResource NotSelectedListItemColor}" />
-                                </DataTrigger>
-                            </Grid.Triggers>
-                        </Grid>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <!-- Save team -->
+        <CollectionView Grid.Row="2"
+                        ItemsSource="{Binding Players}"
+                        SelectionMode="Multiple"
+                        ItemTemplate="{StaticResource PlayerInListDataTemplate}"
+                        EmptyView="Team is empty, please add players"
+                        SelectionChanged="OnSelectionChanged"
+                        
+        />
     </Grid>
 </ContentPage>

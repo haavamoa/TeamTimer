@@ -13,7 +13,7 @@
         <ResourceDictionary Source="Player/PlayerInList.xaml" />
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding SaveTeamCommand}"
+        <ToolbarItem Command="{Binding StartCommand}"
                      Text="Start" />
     </ContentPage.ToolbarItems>
     <Grid Padding="10">

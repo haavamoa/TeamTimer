@@ -10,7 +10,7 @@ namespace TeamTimer.ViewModels.Interfaces.ViewModels
     {
         ObservableCollection<PlayerViewModel> Players { get; }
         ICommand AddPlayerCommand { get; }
-        ICommand SaveTeamCommand { get; }
+        ICommand StartCommand { get; }
         string NewPlayerName { get; set; }
         int NumberOfStartingPlayers { get; }
         Task Initialize(INavigation navigation);

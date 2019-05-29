@@ -7,6 +7,7 @@ using System.Windows.Input;
 using TeamTimer.Models;
 using TeamTimer.Resources.Commands;
 using TeamTimer.Services.Dialog.Interfaces;
+using TeamTimer.Services.Navigation;
 using TeamTimer.ViewModels.Base;
 using TeamTimer.ViewModels.Interfaces.Handlers;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
@@ -18,13 +19,14 @@ namespace TeamTimer.ViewModels
     public class MainViewModel : BaseViewModel, IMainViewModel, IHandleTeamSetup
     {
         private readonly IDialogService m_dialogService;
-        private INavigation? m_navigation;
+        private readonly INavigationService m_navigationService;
         private string m_newPlayerName = string.Empty;
 
-        public MainViewModel(IMatchViewModel matchViewModel, IDialogService dialogService)
+        public MainViewModel(IMatchViewModel matchViewModel, IDialogService dialogService, INavigationService navigationService)
         {
             MatchViewModel = matchViewModel;
             m_dialogService = dialogService;
+            m_navigationService = navigationService;
             StartCommand = new AsyncCommand(_ => NavigateToMatch(), _ => Players.Any(p => p.IsPlaying));
             AddPlayerCommand = new Command(AddPlayerOrPlayers, () => !string.IsNullOrEmpty(NewPlayerName));
             Players = new ObservableCollection<PlayerViewModel>();
@@ -59,12 +61,6 @@ namespace TeamTimer.ViewModels
         }
 
         public int NumberOfStartingPlayers => Players.Count(p => p.IsPlaying);
-
-        public Task Initialize(INavigation navigation)
-        {
-            m_navigation = navigation;
-            return Task.CompletedTask;
-        }
 
         public IMatchViewModel MatchViewModel { get; }
 
@@ -105,20 +101,16 @@ namespace TeamTimer.ViewModels
 
         private async Task NavigateToMatch()
         {
-            if (m_navigation != null)
-            {
-                var currentPage = m_navigation.NavigationStack.LastOrDefault();
-                switch (currentPage)
-                {
-                    case null:
-                        await m_navigation.PushAsync(new MainPage(this));
-                        break;
-                    case MainPage _:
-                        await MatchViewModel.Initialize(Players.Where(p => p.IsPlaying).ToList(), Players.Where(p => !p.IsPlaying).ToList());
-                        await m_navigation.PushAsync(new MatchPage(MatchViewModel));
-                        break;
-                }
-            }
+            await MatchViewModel.Initialize(Players.Where(p => p.IsPlaying).ToList(), Players.Where(p => !p.IsPlaying).ToList(), this);
+            await m_navigationService.NavigateTo<IMatchViewModel>();
         }
+
+        public void Dispose()
+        {
+            
+        }
+
+        public string Title => "Setup Team";
+        public bool IsBusy { get; set; }
     }
 }

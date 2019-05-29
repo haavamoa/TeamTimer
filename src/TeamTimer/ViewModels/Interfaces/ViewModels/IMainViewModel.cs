@@ -6,14 +6,13 @@ using Xamarin.Forms;
 
 namespace TeamTimer.ViewModels.Interfaces.ViewModels
 {
-    public interface IMainViewModel
+    public interface IMainViewModel : IViewModel
     {
         ObservableCollection<PlayerViewModel> Players { get; }
         ICommand AddPlayerCommand { get; }
         ICommand StartCommand { get; }
         string NewPlayerName { get; set; }
         int NumberOfStartingPlayers { get; }
-        Task Initialize(INavigation navigation);
         IMatchViewModel MatchViewModel { get; }
     }
 }

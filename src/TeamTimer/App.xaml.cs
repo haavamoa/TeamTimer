@@ -1,5 +1,6 @@
 ﻿using System;
 using LightInject;
+using TeamTimer.Services.Navigation;
 using TeamTimer.ViewModels.Interfaces;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
 using TeamTimer.Views;
@@ -21,13 +22,16 @@ namespace TeamTimer
 
             var container = new ServiceContainer(new ContainerOptions { EnablePropertyInjection = false });
             container.RegisterFrom<CompositionRoot>();
+            var navigation = container.GetInstance<INavigationService>();
+            navigation.RegisterNavigation(container.GetInstance<IMainViewModel>(), container.GetInstance<MainPage>());
+            navigation.RegisterNavigation(container.GetInstance<IMatchViewModel>(), container.GetInstance<MatchPage>());
             m_mainViewModel = container.GetInstance<IMainViewModel>();
             MainPage = new NavigationPage(container.GetInstance<MainPage>());
         }
 
-        protected override async void OnStart()
+        protected override void OnStart()
         {
-            await m_mainViewModel.Initialize(((NavigationPage)MainPage).CurrentPage.Navigation);
+            //Handle when your app starts
         }
 
         protected override void OnSleep()

@@ -7,6 +7,7 @@ using System.Timers;
 using System.Windows.Input;
 using TeamTimer.Helpers;
 using TeamTimer.ViewModels.Base;
+using TeamTimer.ViewModels.Interfaces.Handlers;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
@@ -19,6 +20,7 @@ namespace TeamTimer.ViewModels
         private int m_matchDurationSeconds;
         private ObservableCollection<PlayerViewModel> m_nonPlayingPlayers;
         private ObservableCollection<PlayerViewModel> m_playingPlayers;
+        private IHandleTeamSetup? m_teamSetupHandler;
 
         public MatchViewModel()
         {
@@ -56,13 +58,14 @@ namespace TeamTimer.ViewModels
         public ICommand StartMatchCommand { get; }
         public ICommand PauseMatchCommand { get; }
 
-        public Task Initialize(List<PlayerViewModel> playingPlayers, List<PlayerViewModel> nonPlayingPlayers)
+        public Task Initialize(List<PlayerViewModel> playingPlayers, List<PlayerViewModel> nonPlayingPlayers, IHandleTeamSetup teamSetupHandler)
         {
             var orderedPlayingPlayers = playingPlayers.OrderByDescending(p => p.PlayTimeInSeconds).ToList();
             orderedPlayingPlayers.MoveLockedToEnd();
             PlayingPlayers = new ObservableCollection<PlayerViewModel>(orderedPlayingPlayers);
             nonPlayingPlayers.MoveLockedToEnd();
             NonPlayingPlayers = new ObservableCollection<PlayerViewModel>(nonPlayingPlayers);
+            m_teamSetupHandler = teamSetupHandler;
             return Task.CompletedTask;
         }
 
@@ -195,7 +198,11 @@ namespace TeamTimer.ViewModels
 
                 PlayingPlayers = new ObservableCollection<PlayerViewModel>(tempPlayingPlayers);
                 NonPlayingPlayers = new ObservableCollection<PlayerViewModel>(tempNonPlayingPlayers);
+                m_teamSetupHandler?.OnPlayerChanged(playingPlayerToSub);
             }
         }
+
+        public string Title => "Match";
+        public bool IsBusy { get; set; }
     }
 }

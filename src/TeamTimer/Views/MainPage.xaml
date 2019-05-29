@@ -7,7 +7,7 @@
              dblend:DataContext="{dblend:DesignInstance ViewModels:IMainViewModel}"
              xmlns:ViewModels="clr-namespace:TeamTimer.ViewModels.Interfaces.ViewModels;assembly=TeamTimer"
              xmlns:Converters="clr-namespace:TeamTimer.Resources.Converters;assembly=TeamTimer"
-             Title="Setup Team"
+             Title="{Binding Title}"
              Visual="Material">
     <ContentPage.Resources>
         <ResourceDictionary Source="Player/PlayerInList.xaml" />

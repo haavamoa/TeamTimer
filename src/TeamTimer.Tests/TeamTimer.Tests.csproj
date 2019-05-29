@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MatchSetupTests\AddingPlayers.cs" />
+    <Compile Include="MatchSetupTests\FinishedSetup.cs" />
     <Compile Include="MatchSetupTests\RemovingPlayers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestBase.cs" />

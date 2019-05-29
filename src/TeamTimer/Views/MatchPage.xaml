@@ -1,6 +1,5 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             Title="Match"
              x:Class="TeamTimer.Views.MatchPage"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:dblend="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,6 +7,7 @@
              xmlns:fvl="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
              xmlns:Converters="clr-namespace:TeamTimer.Resources.Converters;assembly=TeamTimer"
              Visual="Material"
+             Title="{Binding Title}"
              mc:Ignorable="dblend"
              dblend:DataContext="{dblend:DesignInstance ViewModels:IMatchViewModel}">
     <ContentPage.Resources>

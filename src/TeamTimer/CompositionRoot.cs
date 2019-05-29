@@ -2,6 +2,7 @@ using LightInject;
 using TeamTimer.Services;
 using TeamTimer.Services.Dialog;
 using TeamTimer.Services.Dialog.Interfaces;
+using TeamTimer.Services.Navigation;
 using TeamTimer.ViewModels;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
 using TeamTimer.Views;
@@ -15,6 +16,7 @@ namespace TeamTimer
             RegisterServices(serviceRegistry);
             RegisterViewModels(serviceRegistry);
             RegisterViews(serviceRegistry);
+            serviceRegistry.Register<INavigationService, NavigationService>(new PerContainerLifetime());
         }
 
         private static void RegisterServices(IServiceRegistry serviceRegistry)
@@ -25,12 +27,13 @@ namespace TeamTimer
         private static void RegisterViews(IServiceRegistry serviceRegistry)
         {
             serviceRegistry.Register<MainPage>();
+            serviceRegistry.Register<MatchPage>();
         }
 
         private static void RegisterViewModels(IServiceRegistry serviceRegistry)
         {
             serviceRegistry.Register<IMainViewModel, MainViewModel>(new PerContainerLifetime());
-            serviceRegistry.Register<IMatchViewModel, MatchViewModel>();
+            serviceRegistry.Register<IMatchViewModel, MatchViewModel>(new PerContainerLifetime());
         }
     }
 }

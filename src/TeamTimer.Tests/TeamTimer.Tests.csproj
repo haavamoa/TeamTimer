@@ -44,10 +44,6 @@
       <HintPath>..\packages\LightInject.5.0.0\lib\net46\LightInject.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="LightInject.xUnit2, Version=3.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\LightInject.xUnit.3.0.0\lib\net46\LightInject.xUnit2.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Moq, Version=4.11.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.11.0\lib\net45\Moq.dll</HintPath>
     </Reference>

@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using LightInject.xUnit2;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
 using Xunit;
 
@@ -8,7 +7,9 @@ namespace TeamTimer.Tests.MatchSetupTests
     public class MatchSetupTests : TestBase
     {
 
+#pragma warning disable 649
         private IMainViewModel m_mainViewModel;
+#pragma warning restore 649
 
         [Fact]
         public void AddPlayerCommand_AddOnePlayer_PlayerCountIsCorrect()

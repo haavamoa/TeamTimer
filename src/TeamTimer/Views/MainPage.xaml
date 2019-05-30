@@ -81,9 +81,11 @@
                      BackgroundColor="{StaticResource ColorPrimaryDark}" />
         </Grid>
         <!--Team list-->
-        <CollectionView Grid.Row="2"
+        <CollectionView x:Name="TeamCollectionView"
+                        Grid.Row="2"
                         ItemsSource="{Binding Players}"
                         SelectionMode="Multiple"
+                        SelectedItems="{Binding SelectedItems}"
                         ItemTemplate="{StaticResource PlayerInListDataTemplate}"
                         EmptyView="Team is empty, please add players"
                         SelectionChanged="OnSelectionChanged"

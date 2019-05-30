@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using DLToolkit.Forms.Controls.Helpers.FlowListView;
 using TeamTimer.Models;
 using TeamTimer.Resources.Commands;
 using TeamTimer.Services.Dialog.Interfaces;
@@ -16,6 +17,7 @@ using Xamarin.Forms;
 
 namespace TeamTimer.ViewModels
 {
+    [Preserve(AllMembers = true)]
     public class MainViewModel : BaseViewModel, IMainViewModel, IHandleTeamSetup
     {
         private readonly IDialogService m_dialogService;
@@ -44,6 +46,15 @@ namespace TeamTimer.ViewModels
         public void OnPlayerChanged(PlayerViewModel changedPlayer)
         {
             OnPropertyChanged(nameof(NumberOfStartingPlayers));
+            if (changedPlayer.IsPlaying)
+            {
+                SelectedItems?.Add(changedPlayer);
+            }
+            else
+            {
+                SelectedItems?.Remove(changedPlayer);
+            }
+            OnPropertyChanged(nameof(SelectedItems));
             OnPropertyChanged(nameof(Players));
             ((AsyncCommand)StartCommand).ChangeCanExecute();
         }
@@ -63,6 +74,7 @@ namespace TeamTimer.ViewModels
         public int NumberOfStartingPlayers => Players.Count(p => p.IsPlaying);
 
         public IMatchViewModel MatchViewModel { get; }
+        public ObservableCollection<PlayerViewModel>? SelectedItems { get; }
 
         private void AddPlayerOrPlayers()
         {

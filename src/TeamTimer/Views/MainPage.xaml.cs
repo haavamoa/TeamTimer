@@ -32,7 +32,7 @@ namespace TeamTimer.Views
                     continue;
                 }
 
-                potentialDeSelectedPlayer.IsPlaying = false;
+                potentialDeSelectedPlayer.IsPlaying = !potentialDeSelectedPlayer.IsPlaying;
                 return;
             }
 
@@ -44,7 +44,7 @@ namespace TeamTimer.Views
 
             if (lastSelected is PlayerViewModel selectedPlayer)
             {
-                selectedPlayer.IsPlaying = true;
+                selectedPlayer.IsPlaying = !selectedPlayer.IsPlaying;
             }
         }
 

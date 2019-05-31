@@ -1,5 +1,8 @@
 ﻿using System;
 using LightInject;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 using TeamTimer.Services.Navigation;
 using TeamTimer.ViewModels.Interfaces;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
@@ -32,6 +35,10 @@ namespace TeamTimer
         protected override void OnStart()
         {
             //Handle when your app starts
+            AppCenter.Start("android=5ea91421-1ccb-4b2e-b52e-d4e3ae1ee82c;" +
+                            "uwp={Your UWP App secret here};" +
+                            "ios={Your iOS App secret here}",
+                typeof(Analytics), typeof(Crashes));
         }
 
         protected override void OnSleep()

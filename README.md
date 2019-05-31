@@ -9,7 +9,4 @@ substitute. The idea with this app is to manage this for you and keep track of w
 
 This app can be used for any team sport.
 
-Releases:
-https://play.google.com/store/apps/details?id=com.haavamoa.TeamTimer
-
-
+<a href='https://play.google.com/store/apps/details?id=com.haavamoa.TeamTimer&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img heigth="200" width="200" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>

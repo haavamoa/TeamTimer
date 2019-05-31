@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Input;
 using TeamTimer.Helpers;
+using TeamTimer.Services;
 using TeamTimer.ViewModels.Base;
 using TeamTimer.ViewModels.Interfaces.Handlers;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
@@ -14,26 +15,27 @@ using Xamarin.Forms.Internals;
 
 namespace TeamTimer.ViewModels
 {
-    public class MatchViewModel : BaseViewModel, IMatchViewModel, IDisposable
+    public class MatchViewModel : BaseViewModel, IMatchViewModel
     {
         private bool m_isMatchStarted;
         private int m_matchDurationSeconds;
         private ObservableCollection<PlayerViewModel> m_nonPlayingPlayers;
         private ObservableCollection<PlayerViewModel> m_playingPlayers;
-        private IHandleTeamSetup? m_teamSetupHandler;
+        private IHandleTeamSetup m_teamSetupHandler;
 
-        public MatchViewModel()
+        public MatchViewModel(IStopwatchService stopwatchService)
         {
+            StopwatchService = stopwatchService;
             m_playingPlayers = new ObservableCollection<PlayerViewModel>();
             m_nonPlayingPlayers = new ObservableCollection<PlayerViewModel>();
             StartMatchCommand = new Command(StartMatch);
             PauseMatchCommand = new Command(PauseMatch);
-            Timer = new Timer() { Interval = 1000 };
-            Timer.Elapsed += OnEachMatchSecond;
+            stopwatchService.RegisterInterval(1000, OnEachMatchSecond);
         }
 
+        public IStopwatchService StopwatchService { get; }
+
         private bool ShouldSubstitute => PlayingPlayers.Any(p => p.IsMarkedForSubstitution) && NonPlayingPlayers.Any(p => p.IsMarkedForSubstitution);
-        public Timer Timer { get; }
 
         public string MatchDuration => TimeSpan.FromSeconds(m_matchDurationSeconds).ToShortForm();
 
@@ -77,11 +79,6 @@ namespace TeamTimer.ViewModels
             OnPropertyChanged(nameof(MatchDuration));
         }
 
-        public void Dispose()
-        {
-            Timer.Elapsed -= OnEachMatchSecond;
-        }
-
         public void OnPlayerChanged(PlayerViewModel changedPlayer)
         {
             var tempPlayingPlayers = PlayingPlayers.ToList();
@@ -119,17 +116,17 @@ namespace TeamTimer.ViewModels
 
         private void PauseMatch()
         {
-            Timer.Enabled = false;
+            StopwatchService.Pause();
             IsMatchStarted = false;
         }
 
         private void StartMatch()
         {
-            Timer.Enabled = true;
+            StopwatchService.Start();
             IsMatchStarted = true;
         }
 
-        private void OnEachMatchSecond(object sender, ElapsedEventArgs e)
+        private void OnEachMatchSecond()
         {
             m_matchDurationSeconds += 1;
             OnPropertyChanged(nameof(MatchDuration));
@@ -168,12 +165,12 @@ namespace TeamTimer.ViewModels
         {
             var tempPlayingPlayers = PlayingPlayers.ToList();
             var tempNonPlayingPlayers = NonPlayingPlayers.ToList();
-            PlayerViewModel? playingPlayerToSub = null;
+            PlayerViewModel playingPlayerToSub = null;
             foreach (var playingPlayer in tempPlayingPlayers)
                 if (playingPlayer.IsMarkedForSubstitution)
                     playingPlayerToSub = playingPlayer;
 
-            PlayerViewModel? nonPlayingPlayerToSub = null;
+            PlayerViewModel nonPlayingPlayerToSub = null;
             foreach (var nonPlayingPlayer in tempNonPlayingPlayers)
                 if (nonPlayingPlayer.IsMarkedForSubstitution)
                     nonPlayingPlayerToSub = nonPlayingPlayer;
@@ -204,5 +201,10 @@ namespace TeamTimer.ViewModels
 
         public string Title => "Match";
         public bool IsBusy { get; set; }
+
+        public void Dispose()
+        {
+            StopwatchService?.Dispose();
+        }
     }
 }

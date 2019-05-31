@@ -85,6 +85,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DuringMatchTests\StartMatchTests.cs" />
     <Compile Include="MatchSetupTests\AddingPlayers.cs" />
     <Compile Include="MatchSetupTests\FinishedSetup.cs" />
     <Compile Include="MatchSetupTests\RemovingPlayers.cs" />

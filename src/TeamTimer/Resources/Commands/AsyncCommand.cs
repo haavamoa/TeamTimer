@@ -9,7 +9,7 @@ namespace TeamTimer.Resources.Commands
         private readonly Func<object, bool> m_canExecute;
         private readonly Func<object, Task> m_command;
 
-        public AsyncCommand(Func<object, Task> command, Func<object, bool>? canExecute = null)
+        public AsyncCommand(Func<object, Task> command, Func<object, bool> canExecute = null)
         {
             m_command = command;
             m_canExecute = canExecute ?? (o => true);

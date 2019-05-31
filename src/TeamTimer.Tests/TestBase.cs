@@ -9,8 +9,8 @@ namespace TeamTimer.Tests
         public TestBase()
         {
             var container = CreateContainer();
-            Configure(container);
             container.RegisterFrom<CompositionRoot>();
+            Configure(container);
             ServiceFactory = container.BeginScope();
             InjectPrivateFields();
         }
@@ -20,7 +20,10 @@ namespace TeamTimer.Tests
             var privateInstanceFields = this.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (var privateInstanceField in privateInstanceFields)
             {
-                privateInstanceField.SetValue(this, GetInstance(privateInstanceField));
+                if (privateInstanceField.GetValue(this) == null)
+                {
+                    privateInstanceField.SetValue(this, GetInstance(privateInstanceField));   
+                }
             }
         }
 

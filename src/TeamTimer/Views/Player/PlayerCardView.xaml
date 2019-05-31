@@ -28,7 +28,6 @@
                            TextColor="Black"
                            FontSize="Medium"
                            HorizontalOptions="CenterAndExpand">
-
                         <Label.Triggers>
                             <DataTrigger TargetType="{x:Type Label}"
                                          Binding="{Binding IsMarkedForSubstitution}"

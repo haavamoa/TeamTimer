@@ -22,6 +22,7 @@ namespace TeamTimer
         private static void RegisterServices(IServiceRegistry serviceRegistry)
         {
             serviceRegistry.Register<IDialogService, DialogService>(new PerContainerLifetime());
+            serviceRegistry.Register<IStopwatchService, StopwatchService>(new PerContainerLifetime());
         }
 
         private static void RegisterViews(IServiceRegistry serviceRegistry)

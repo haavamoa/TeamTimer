@@ -74,7 +74,7 @@ namespace TeamTimer.ViewModels
         public int NumberOfStartingPlayers => Players.Count(p => p.IsPlaying);
 
         public IMatchViewModel MatchViewModel { get; }
-        public ObservableCollection<PlayerViewModel>? SelectedItems { get; }
+        public ObservableCollection<PlayerViewModel> SelectedItems { get; }
 
         private void AddPlayerOrPlayers()
         {

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Input;
+using TeamTimer.Services;
 using TeamTimer.ViewModels.Interfaces.Handlers;
 
 namespace TeamTimer.ViewModels.Interfaces.ViewModels
@@ -16,7 +17,7 @@ namespace TeamTimer.ViewModels.Interfaces.ViewModels
         string MatchDuration { get; }
         ICommand StartMatchCommand { get; }
         ICommand PauseMatchCommand { get; }
-        Timer Timer { get; }
+        IStopwatchService StopwatchService { get; }
         Task Initialize(List<PlayerViewModel> playingPlayers, List<PlayerViewModel> nonPlayingPlayers, IHandleTeamSetup teamSetupHandler);
         void UpdateMatchDuration(int seconds);
     }

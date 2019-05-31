@@ -39,7 +39,7 @@ namespace TeamTimer
             // Handle when your app sleeps
             if (m_mainViewModel.MatchViewModel.IsMatchStarted)
             {
-                m_mainViewModel.MatchViewModel.Timer.Enabled = false;
+                m_mainViewModel.MatchViewModel.StopwatchService.Pause();
                 m_whenSleptDateTime = DateTime.Now;
             }
         }
@@ -54,7 +54,7 @@ namespace TeamTimer
                 if (elapsed.HasValue)
                 {
                     m_mainViewModel.MatchViewModel.UpdateMatchDuration((int)elapsed.Value.TotalSeconds);
-                    m_mainViewModel.MatchViewModel.Timer.Enabled = true;
+                    m_mainViewModel.MatchViewModel.StopwatchService.Start();
                 }
             }
         }

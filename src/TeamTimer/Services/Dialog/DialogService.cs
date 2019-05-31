@@ -14,7 +14,7 @@ namespace TeamTimer.Services.Dialog
             return await Application.Current.MainPage.DisplayAlert(title, message, accept, cancel);
         }
 
-        public async Task ShowActionSheet(string title, string cancel, string? destruction = null, params DialogAction[] actions)
+        public async Task ShowActionSheet(string title, string cancel, string destruction = null, params DialogAction[] actions)
         {
             var buttons = actions.Select(a => a.ButtonText).ToArray();
             var buttonPressed = await Application.Current.MainPage.DisplayActionSheet(title, cancel, destruction, buttons);

@@ -1,4 +1,4 @@
-[![Buildstatus](https://build.appcenter.ms/v0.1/apps/593dbf2d-f6dd-43ed-ba1a-bbbdb541890c/branches/master/badge)](https://appcenter.ms)
+[![Build status](https://build.appcenter.ms/v0.1/apps/0a32e24f-0ce7-46f5-8d61-1f63fed89f7a/branches/master/badge)](https://appcenter.ms)
 
 # TeamTimer
 

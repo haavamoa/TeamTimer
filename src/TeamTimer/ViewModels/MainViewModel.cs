@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using DLToolkit.Forms.Controls.Helpers.FlowListView;
+using Microsoft.AppCenter.Analytics;
 using TeamTimer.Models;
 using TeamTimer.Resources.Commands;
 using TeamTimer.Services.Dialog.Interfaces;
@@ -81,6 +82,7 @@ namespace TeamTimer.ViewModels
             if (IsMultipleNames(NewPlayerName, out var players))
             {
                 players.ForEach(p => AddPlayer(p.Name));
+                Analytics.TrackEvent("User used multi players add functionality");
             }
             else
             {

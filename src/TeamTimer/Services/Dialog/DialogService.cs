@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 using TeamTimer.Services.Dialog.Interfaces;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
@@ -27,10 +30,12 @@ namespace TeamTimer.Services.Dialog
             try
             {
                 actions.Single(a => a.ButtonText.Equals(buttonPressed)).Action.Invoke();
+                Analytics.TrackEvent($"User used {buttonPressed} action from action sheet");
             }
             catch (Exception exception)
             {
                 await ShowAlert("Something went wrong", exception.Message, "Got it", "Cancel");
+                Crashes.TrackError(exception);
             }
         }
     }

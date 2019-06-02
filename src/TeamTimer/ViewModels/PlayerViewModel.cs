@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.AppCenter.Analytics;
 using TeamTimer.Helpers;
 using TeamTimer.Models;
 using TeamTimer.Resources.Commands;
@@ -92,6 +93,7 @@ namespace TeamTimer.ViewModels
 
         private async Task OpenInformation()
         {
+            Analytics.TrackEvent("User opened extra information");
             IsMarkedForSubstitution = false;
 
             var actions = new List<DialogAction>

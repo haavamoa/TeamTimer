@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using TeamTimer.ViewModels;
 using Xamarin.Forms.Internals;
@@ -37,6 +38,21 @@ namespace TeamTimer.Helpers
         public static void DeMarkEveryoneExcept(this IEnumerable<PlayerViewModel> listOfPlayers, PlayerViewModel thePlayerToIgnore)
         {
             listOfPlayers.Where(p => !p.Equals(thePlayerToIgnore)).ForEach(p => p.IsMarkedForSubstitution = false);
+        }
+
+        public static void AddPlayersToExisting(this ObservableCollection<PlayerViewModel> listOfPlayers, IList<PlayerViewModel> newListOfPlayers)
+        {
+            if (listOfPlayers.Any())
+            {
+                foreach (var newNonPlayingPlayer in newListOfPlayers.Where(n => !listOfPlayers.Contains(n)))
+                {
+                    listOfPlayers.Add(newNonPlayingPlayer);
+                }
+            }
+            else
+            {
+                listOfPlayers = new ObservableCollection<PlayerViewModel>(newListOfPlayers);
+            }
         }
     }
 }

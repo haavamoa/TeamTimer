@@ -42,19 +42,19 @@ namespace TeamTimer.ViewModels
         public ObservableCollection<PlayerViewModel> PlayingPlayers
         {
             get => m_playingPlayers;
-            set => SetProperty(ref m_playingPlayers, value);
+            private set => SetProperty(ref m_playingPlayers, value);
         }
 
         public ObservableCollection<PlayerViewModel> NonPlayingPlayers
         {
             get => m_nonPlayingPlayers;
-            set => SetProperty(ref m_nonPlayingPlayers, value);
+            private set => SetProperty(ref m_nonPlayingPlayers, value);
         }
 
         public bool IsMatchStarted
         {
             get => m_isMatchStarted;
-            set => SetProperty(ref m_isMatchStarted, value);
+            private set => SetProperty(ref m_isMatchStarted, value);
         }
 
         public ICommand StartMatchCommand { get; }
@@ -165,15 +165,8 @@ namespace TeamTimer.ViewModels
         {
             var tempPlayingPlayers = PlayingPlayers.ToList();
             var tempNonPlayingPlayers = NonPlayingPlayers.ToList();
-            PlayerViewModel playingPlayerToSub = null;
-            foreach (var playingPlayer in tempPlayingPlayers)
-                if (playingPlayer.IsMarkedForSubstitution)
-                    playingPlayerToSub = playingPlayer;
-
-            PlayerViewModel nonPlayingPlayerToSub = null;
-            foreach (var nonPlayingPlayer in tempNonPlayingPlayers)
-                if (nonPlayingPlayer.IsMarkedForSubstitution)
-                    nonPlayingPlayerToSub = nonPlayingPlayer;
+            var playingPlayerToSub = tempPlayingPlayers.Single(p => p.IsMarkedForSubstitution);
+            var nonPlayingPlayerToSub = tempNonPlayingPlayers.Single(p => p.IsMarkedForSubstitution);
 
             if (playingPlayerToSub != null && nonPlayingPlayerToSub != null)
             {
@@ -181,11 +174,11 @@ namespace TeamTimer.ViewModels
                 tempNonPlayingPlayers.Remove(nonPlayingPlayerToSub);
 
                 tempPlayingPlayers.Add(nonPlayingPlayerToSub);
-
                 tempNonPlayingPlayers.Add(playingPlayerToSub);
 
                 playingPlayerToSub.IsMarkedForSubstitution = false;
                 nonPlayingPlayerToSub.IsMarkedForSubstitution = false;
+                
                 playingPlayerToSub.IsPlaying = false;
                 nonPlayingPlayerToSub.IsPlaying = true;
 

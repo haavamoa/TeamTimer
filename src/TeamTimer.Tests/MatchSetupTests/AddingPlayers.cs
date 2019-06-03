@@ -39,6 +39,8 @@ namespace TeamTimer.Tests.MatchSetupTests
             m_mainViewModel.AddPlayerCommand.Execute(null);
 
             m_mainViewModel.Players.Should().HaveCount(3, "Three players have been added");
+            
+            mock_profilerService.Verify(p => p.RaiseEvent(It.IsAny<string>()), Times.Once);
         }
     }
 }

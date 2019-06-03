@@ -1,4 +1,5 @@
 [![Build status](https://build.appcenter.ms/v0.1/apps/0a32e24f-0ce7-46f5-8d61-1f63fed89f7a/branches/master/badge)](https://appcenter.ms)
+[![Build Status](https://dev.azure.com/havardmoas/HaavamoaProjects/_apis/build/status/haavamoa.TeamTimer?branchName=master)](https://dev.azure.com/havardmoas/HaavamoaProjects/_build/latest?definitionId=5&branchName=master)
 
 # TeamTimer
 

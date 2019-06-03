@@ -1,12 +1,5 @@
 # Xamarin.Android
-- task: VSTest@2
-  inputs:
-    testSelector: 'testAssemblies'
-    testAssemblyVer2: '**\*test*.dll
-      !**\*TestAdapter.dll
-      !**\obj\**'
-    searchFolder: '$(System.DefaultWorkingDirectory)'
-    codeCoverageEnabled: true
+
 # Build a Xamarin.Android project.
 # Add steps that test, sign, and distribute an app, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/xamarin
@@ -15,7 +8,7 @@ trigger:
 - master
 
 pool:
-  vmImage: 'macos-latest'
+  vmImage: 'windows-2019'
 
 variables:
   buildConfiguration: 'Release'
@@ -28,8 +21,15 @@ steps:
   inputs:
     restoreSolution: '**/*.sln'
 
-- task: XamarinAndroid@1
+- task: MSBuild@1
   inputs:
-    projectFile: '**/*droid*.csproj'
-    outputDirectory: '$(outputDirectory)'
+    solution: '**/*.sln'
     configuration: '$(buildConfiguration)'
+    
+- task: VSTest@2
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: 'src\**\bin\$(BuildConfiguration)\*test*.dll'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    codeCoverageEnabled: true
+

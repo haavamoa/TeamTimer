@@ -35,7 +35,7 @@ namespace TeamTimer
 
         private static void RegisterViewModels(IServiceRegistry serviceRegistry)
         {
-            serviceRegistry.Register<IMainViewModel, MainViewModel>(new PerContainerLifetime());
+            serviceRegistry.Register<ITeamSetupViewModel, TeamSetupViewModel>(new PerContainerLifetime());
             serviceRegistry.Register<IMatchViewModel, MatchViewModel>(new PerContainerLifetime());
         }
     }

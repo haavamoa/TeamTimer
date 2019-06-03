@@ -88,10 +88,10 @@
     <Compile Include="DuringMatchTests\StartMatchTests.cs" />
     <Compile Include="DuringMatchTests\SubstitutionTests.cs" />
     <Compile Include="Helpers\PlayerBuilder.cs" />
-    <Compile Include="MatchSetupTests\AddingPlayers.cs" />
-    <Compile Include="MatchSetupTests\FinishedSetup.cs" />
-    <Compile Include="MatchSetupTests\RemovingPlayers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TeamSetupTests\AddingPlayers.cs" />
+    <Compile Include="TeamSetupTests\FinishedSetup.cs" />
+    <Compile Include="TeamSetupTests\RemovingPlayers.cs" />
     <Compile Include="TestBase.cs" />
   </ItemGroup>
   <ItemGroup>

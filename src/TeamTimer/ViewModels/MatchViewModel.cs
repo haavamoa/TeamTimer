@@ -66,7 +66,17 @@ namespace TeamTimer.ViewModels
             orderedPlayingPlayers.MoveLockedToEnd();
             PlayingPlayers = new ObservableCollection<PlayerViewModel>(orderedPlayingPlayers);
             nonPlayingPlayers.MoveLockedToEnd();
-            NonPlayingPlayers = new ObservableCollection<PlayerViewModel>(nonPlayingPlayers);
+            if (NonPlayingPlayers.Any())
+            {
+                foreach (var newNonPlayingPlayer in nonPlayingPlayers.Where(n => !NonPlayingPlayers.Contains(n)))
+                {
+                    NonPlayingPlayers.Add(newNonPlayingPlayer);
+                }
+            }
+            else
+            {
+                NonPlayingPlayers = new ObservableCollection<PlayerViewModel>(nonPlayingPlayers);
+            }
             m_teamSetupHandler = teamSetupHandler;
             return Task.CompletedTask;
         }

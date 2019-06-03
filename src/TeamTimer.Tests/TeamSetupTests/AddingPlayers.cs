@@ -5,7 +5,7 @@ using TeamTimer.Services.Profiling;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
 using Xunit;
 
-namespace TeamTimer.Tests.MatchSetupTests
+namespace TeamTimer.Tests.TeamSetupTests
 {
     public class MatchSetupTests : TestBase
     {

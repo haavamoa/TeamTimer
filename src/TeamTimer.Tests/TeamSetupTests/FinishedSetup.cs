@@ -7,15 +7,17 @@ using TeamTimer.Services.Profiling;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
 using Xunit;
 
-namespace TeamTimer.Tests.MatchSetupTests
+namespace TeamTimer.Tests.TeamSetupTests
 {
     public class FinishedSetup : TestBase
     {
-#pragma warning disable 169
+
+#pragma warning disable 649
         private ITeamSetupViewModel m_teamSetupViewModel;
+#pragma warning restore 649
         private Mock<INavigationService> mock_navigationService;
         private Mock<IProfilerService> mock_profilerService;
-#pragma warning restore 169
+
         internal override void Configure(IServiceRegistry serviceRegistry)
         {
             mock_navigationService = new Mock<INavigationService>();

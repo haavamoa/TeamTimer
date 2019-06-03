@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace TeamTimer.ViewModels.Interfaces.ViewModels
 {
-    public interface IMainViewModel : IViewModel
+    public interface ITeamSetupViewModel : IViewModel
     {
         ObservableCollection<PlayerViewModel> Players { get; }
         ICommand AddPlayerCommand { get; }

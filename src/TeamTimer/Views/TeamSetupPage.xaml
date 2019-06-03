@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:dblend="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="dblend"
-             dblend:DataContext="{dblend:DesignInstance ViewModels:IMainViewModel}"
+             dblend:DataContext="{dblend:DesignInstance ViewModels:ITeamSetupViewModel}"
              xmlns:ViewModels="clr-namespace:TeamTimer.ViewModels.Interfaces.ViewModels;assembly=TeamTimer"
              xmlns:Converters="clr-namespace:TeamTimer.Resources.Converters;assembly=TeamTimer"
              Title="{Binding Title}"

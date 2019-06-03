@@ -8,11 +8,11 @@ namespace TeamTimer.Views
 {
     public partial class MainPage : ContentPage
     {
-        public MainPage(IMainViewModel mainViewModel)
+        public MainPage(ITeamSetupViewModel teamSetupViewModel)
         {
             InitializeComponent();
 
-            BindingContext = mainViewModel;
+            BindingContext = teamSetupViewModel;
         }
 
         private void OnPlayerAdded(object sender, EventArgs e)

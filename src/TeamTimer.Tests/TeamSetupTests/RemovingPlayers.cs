@@ -4,10 +4,9 @@ using LightInject;
 using Moq;
 using TeamTimer.Services.Profiling;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
-using Xamarin.Forms.Internals;
 using Xunit;
 
-namespace TeamTimer.Tests.MatchSetupTests
+namespace TeamTimer.Tests.TeamSetupTests
 {
     public class RemovingPlayers : TestBase
     {

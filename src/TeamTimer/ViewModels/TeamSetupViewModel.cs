@@ -19,14 +19,14 @@ using Xamarin.Forms;
 namespace TeamTimer.ViewModels
 {
     [Preserve(AllMembers = true)]
-    public class MainViewModel : BaseViewModel, IMainViewModel, IHandleTeamSetup
+    public class TeamSetupViewModel : BaseViewModel, ITeamSetupViewModel, IHandleTeamSetup
     {
         private readonly IDialogService m_dialogService;
         private readonly INavigationService m_navigationService;
         private readonly IProfilerService m_profilerService;
         private string m_newPlayerName = string.Empty;
 
-        public MainViewModel(IMatchViewModel matchViewModel, IDialogService dialogService, INavigationService navigationService, IProfilerService profilerService)
+        public TeamSetupViewModel(IMatchViewModel matchViewModel, IDialogService dialogService, INavigationService navigationService, IProfilerService profilerService)
         {
             MatchViewModel = matchViewModel;
             m_dialogService = dialogService;

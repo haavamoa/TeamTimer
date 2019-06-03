@@ -11,7 +11,7 @@ namespace TeamTimer.Tests.MatchSetupTests
     {
 
 #pragma warning disable 649
-        private IMainViewModel m_mainViewModel;
+        private ITeamSetupViewModel m_teamSetupViewModel;
         private Mock<IProfilerService> mock_profilerService;
 #pragma warning restore 649
 
@@ -24,21 +24,21 @@ namespace TeamTimer.Tests.MatchSetupTests
         [Fact]
         public void AddPlayerCommand_AddOnePlayer_PlayerCountIsCorrect()
         {
-            m_mainViewModel.NewPlayerName = "TestName";
+            m_teamSetupViewModel.NewPlayerName = "TestName";
             
-            m_mainViewModel.AddPlayerCommand.Execute(null);
+            m_teamSetupViewModel.AddPlayerCommand.Execute(null);
 
-            m_mainViewModel.Players.Should().HaveCount(1, "One player has been added");
+            m_teamSetupViewModel.Players.Should().HaveCount(1, "One player has been added");
         }
 
         [Fact]
         public void AddPlayerCommand_AddMultiplePlayers_PlayerCountIsCorrect()
         {
-            m_mainViewModel.NewPlayerName = "TestName1;TestName2;TestName3";
+            m_teamSetupViewModel.NewPlayerName = "TestName1;TestName2;TestName3";
 
-            m_mainViewModel.AddPlayerCommand.Execute(null);
+            m_teamSetupViewModel.AddPlayerCommand.Execute(null);
 
-            m_mainViewModel.Players.Should().HaveCount(3, "Three players have been added");
+            m_teamSetupViewModel.Players.Should().HaveCount(3, "Three players have been added");
             
             mock_profilerService.Verify(p => p.RaiseEvent(It.IsAny<string>()), Times.Once);
         }

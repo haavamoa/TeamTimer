@@ -12,7 +12,7 @@ namespace TeamTimer.Tests.MatchSetupTests
     public class FinishedSetup : TestBase
     {
 #pragma warning disable 169
-        private IMainViewModel m_mainViewModel;
+        private ITeamSetupViewModel m_teamSetupViewModel;
         private Mock<INavigationService> mock_navigationService;
         private Mock<IProfilerService> mock_profilerService;
 #pragma warning restore 169
@@ -27,18 +27,18 @@ namespace TeamTimer.Tests.MatchSetupTests
         [Fact]
         public void StartCommand_PlayingPlayersIsSet_InitializesAndNavigatesToMatch()
         {
-            m_mainViewModel.NewPlayerName = "TestName1;TestName2;TestName3";
+            m_teamSetupViewModel.NewPlayerName = "TestName1;TestName2;TestName3";
 
-            m_mainViewModel.AddPlayerCommand.Execute(null);
+            m_teamSetupViewModel.AddPlayerCommand.Execute(null);
 
-            m_mainViewModel.Players.Single(p => p.Name.Equals("TestName1")).IsPlaying = true;
+            m_teamSetupViewModel.Players.Single(p => p.Name.Equals("TestName1")).IsPlaying = true;
 
-            m_mainViewModel.StartCommand.Execute(null);
+            m_teamSetupViewModel.StartCommand.Execute(null);
             
             mock_navigationService.Verify(n => n.NavigateTo<IMatchViewModel>(), Times.Once);
 
-            m_mainViewModel.MatchViewModel.PlayingPlayers.Should().HaveCount(1);
-            m_mainViewModel.MatchViewModel.NonPlayingPlayers.Should().HaveCount(2);
+            m_teamSetupViewModel.MatchViewModel.PlayingPlayers.Should().HaveCount(1);
+            m_teamSetupViewModel.MatchViewModel.NonPlayingPlayers.Should().HaveCount(2);
         }
 
     }

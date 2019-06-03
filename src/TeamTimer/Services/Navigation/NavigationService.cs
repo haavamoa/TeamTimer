@@ -4,8 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AppCenter.Crashes;
 using TeamTimer.Services.Dialog.Interfaces;
+using TeamTimer.Services.Profiling;
 using TeamTimer.ViewModels.Interfaces;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
 using Xamarin.Forms;
@@ -16,11 +16,13 @@ namespace TeamTimer.Services.Navigation
     public class NavigationService : INavigationService
     {
         private readonly IDialogService m_dialogService;
+        private readonly IProfilerService m_profilerService;
         private readonly Dictionary<IViewModel, Page> m_navigationRegister;
 
-        public NavigationService(IDialogService dialogService)
+        public NavigationService(IDialogService dialogService, IProfilerService profilerService)
         {
             m_dialogService = dialogService;
+            m_profilerService = profilerService;
             m_navigationRegister = new Dictionary<IViewModel, Page>();
         }
 
@@ -41,7 +43,7 @@ namespace TeamTimer.Services.Navigation
             catch (Exception exception)
             {
                await m_dialogService.ShowAlert("Something went wrong when navigating", exception.Message, "Got it!", "Cancel");
-               Crashes.TrackError(exception);
+               m_profilerService.RaiseError(exception);
             }
         }
 

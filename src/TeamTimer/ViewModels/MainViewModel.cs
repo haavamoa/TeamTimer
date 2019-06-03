@@ -5,11 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using DLToolkit.Forms.Controls.Helpers.FlowListView;
-using Microsoft.AppCenter.Analytics;
 using TeamTimer.Models;
 using TeamTimer.Resources.Commands;
 using TeamTimer.Services.Dialog.Interfaces;
 using TeamTimer.Services.Navigation;
+using TeamTimer.Services.Profiling;
 using TeamTimer.ViewModels.Base;
 using TeamTimer.ViewModels.Interfaces.Handlers;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
@@ -23,13 +23,15 @@ namespace TeamTimer.ViewModels
     {
         private readonly IDialogService m_dialogService;
         private readonly INavigationService m_navigationService;
+        private readonly IProfilerService m_profilerService;
         private string m_newPlayerName = string.Empty;
 
-        public MainViewModel(IMatchViewModel matchViewModel, IDialogService dialogService, INavigationService navigationService)
+        public MainViewModel(IMatchViewModel matchViewModel, IDialogService dialogService, INavigationService navigationService, IProfilerService profilerService)
         {
             MatchViewModel = matchViewModel;
             m_dialogService = dialogService;
             m_navigationService = navigationService;
+            m_profilerService = profilerService;
             StartCommand = new AsyncCommand(_ => NavigateToMatch(), _ => Players.Any(p => p.IsPlaying));
             AddPlayerCommand = new Command(AddPlayerOrPlayers, () => !string.IsNullOrEmpty(NewPlayerName));
             Players = new ObservableCollection<PlayerViewModel>();
@@ -82,7 +84,7 @@ namespace TeamTimer.ViewModels
             if (IsMultipleNames(NewPlayerName, out var players))
             {
                 players.ForEach(p => AddPlayer(p.Name));
-                Analytics.TrackEvent("User used multi players add functionality");
+                m_profilerService.RaiseEvent("User used multi players add functionality");
             }
             else
             {
@@ -99,7 +101,7 @@ namespace TeamTimer.ViewModels
 
         private void AddPlayer(string newPlayerName)
         {
-            var newPlayer = new PlayerViewModel(new Player(newPlayerName), this, MatchViewModel, m_dialogService);
+            var newPlayer = new PlayerViewModel(new Player(newPlayerName), this, MatchViewModel, m_dialogService, m_profilerService);
             Players.Add(newPlayer);
             OnPropertyChanged(nameof(Players));
             ((AsyncCommand)StartCommand).ChangeCanExecute();
@@ -109,7 +111,8 @@ namespace TeamTimer.ViewModels
         {
             var newPlayerNames = newPlayerName.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             players = new List<PlayerViewModel>();
-            players.AddRange(newPlayerNames.Select(newPlayer => new PlayerViewModel(new Player(newPlayer), this, MatchViewModel, m_dialogService)));
+            players.AddRange(newPlayerNames.Select(newPlayer => new PlayerViewModel(new Player(newPlayer), this, MatchViewModel, m_dialogService, 
+            m_profilerService)));
             return players.Count > 1;
         }
 

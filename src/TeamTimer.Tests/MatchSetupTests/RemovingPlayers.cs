@@ -1,5 +1,8 @@
 ﻿using System.Linq;
 using FluentAssertions;
+using LightInject;
+using Moq;
+using TeamTimer.Services.Profiling;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
 using Xamarin.Forms.Internals;
 using Xunit;
@@ -11,8 +14,16 @@ namespace TeamTimer.Tests.MatchSetupTests
 
 #pragma warning disable 649
         private IMainViewModel m_mainViewModel;
+        private Mock<IProfilerService> mock_profilerService;
 #pragma warning restore 649
 
+        
+        internal override void Configure(IServiceRegistry serviceRegistry)
+        {
+            mock_profilerService = new Mock<IProfilerService>();
+            serviceRegistry.Register<IProfilerService>(p => mock_profilerService.Object);
+        }
+        
         [Fact]
         public void DeletePlayerCommand_MultiplePlayersAddedAndOneDeleted_PlayersCountIsCorrect()
         {

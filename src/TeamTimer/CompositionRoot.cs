@@ -3,6 +3,7 @@ using TeamTimer.Services;
 using TeamTimer.Services.Dialog;
 using TeamTimer.Services.Dialog.Interfaces;
 using TeamTimer.Services.Navigation;
+using TeamTimer.Services.Profiling;
 using TeamTimer.ViewModels;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
 using TeamTimer.Views;
@@ -23,6 +24,7 @@ namespace TeamTimer
         {
             serviceRegistry.Register<IDialogService, DialogService>(new PerContainerLifetime());
             serviceRegistry.Register<IStopwatchService, StopwatchService>(new PerContainerLifetime());
+            serviceRegistry.Register<IProfilerService, ProfilerService>(new PerContainerLifetime());
         }
 
         private static void RegisterViews(IServiceRegistry serviceRegistry)

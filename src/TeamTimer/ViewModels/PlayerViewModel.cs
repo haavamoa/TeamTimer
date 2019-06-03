@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Microsoft.AppCenter.Analytics;
 using TeamTimer.Helpers;
 using TeamTimer.Models;
 using TeamTimer.Resources.Commands;
 using TeamTimer.Services.Dialog;
 using TeamTimer.Services.Dialog.Interfaces;
+using TeamTimer.Services.Profiling;
 using TeamTimer.ViewModels.Base;
 using TeamTimer.ViewModels.Interfaces.Handlers;
 using Xamarin.Forms;
@@ -17,6 +17,7 @@ namespace TeamTimer.ViewModels
     public class PlayerViewModel : BaseViewModel
     {
         private readonly IDialogService m_dialogService;
+        private readonly IProfilerService m_profilerService;
         private readonly IHandleMatch m_matchHandler;
         private readonly Player m_player;
         private readonly IHandleTeamSetup m_teamSetupHandler;
@@ -25,12 +26,14 @@ namespace TeamTimer.ViewModels
         private bool m_isPlaying;
         private int m_playTimeInSeconds;
 
-        public PlayerViewModel(Player player, IHandleTeamSetup teamSetupHandler, IHandleMatch matchHandler, IDialogService dialogService)
+        public PlayerViewModel(Player player, IHandleTeamSetup teamSetupHandler, IHandleMatch matchHandler, IDialogService dialogService, 
+        IProfilerService profilerService)
         {
             m_player = player;
             m_teamSetupHandler = teamSetupHandler;
             m_matchHandler = matchHandler;
             m_dialogService = dialogService;
+            m_profilerService = profilerService;
             DeletePlayerCommand = new Command(_ => m_teamSetupHandler?.OnPlayerDeleted(this));
             OpenInformationCommand = new AsyncCommand(_ => OpenInformation());
             MarkedForSubstitutionCommand = new Command(MarkForSubstitution);
@@ -93,7 +96,7 @@ namespace TeamTimer.ViewModels
 
         private async Task OpenInformation()
         {
-            Analytics.TrackEvent("User opened extra information");
+            m_profilerService.RaiseEvent("User opened extra information");
             IsMarkedForSubstitution = false;
 
             var actions = new List<DialogAction>

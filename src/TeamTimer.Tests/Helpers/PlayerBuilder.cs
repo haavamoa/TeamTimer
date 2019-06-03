@@ -1,6 +1,7 @@
 using Moq;
 using TeamTimer.Models;
 using TeamTimer.Services.Dialog.Interfaces;
+using TeamTimer.Services.Profiling;
 using TeamTimer.ViewModels;
 using TeamTimer.ViewModels.Interfaces.Handlers;
 
@@ -20,7 +21,7 @@ namespace TeamTimer.Tests.Helpers
         public PlayerViewModel Build(string name)
         {
             m_playerViewModel = new PlayerViewModel(new Player(name), new Mock<IHandleTeamSetup>().Object, new Mock<IHandleMatch>().Object,new 
-                Mock<IDialogService>().Object)
+                Mock<IDialogService>().Object, new Mock<IProfilerService>().Object)
             {
                 IsPlaying = m_isPlaying
             };

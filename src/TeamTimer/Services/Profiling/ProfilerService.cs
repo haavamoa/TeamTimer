@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 
 namespace TeamTimer.Services.Profiling

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows.Input;
 using TeamTimer.Helpers;
 using TeamTimer.Services;
+using TeamTimer.Services.Dialog;
+using TeamTimer.Services.Dialog.Interfaces;
+using TeamTimer.Services.Navigation;
 using TeamTimer.ViewModels.Base;
 using TeamTimer.ViewModels.Interfaces.Handlers;
 using TeamTimer.ViewModels.Interfaces.ViewModels;
@@ -17,25 +19,32 @@ namespace TeamTimer.ViewModels
 {
     public class MatchViewModel : BaseViewModel, IMatchViewModel
     {
+        private readonly IDialogService m_dialogService;
+        private readonly INavigationService m_navigationService;
         private bool m_isMatchStarted;
         private int m_matchDurationSeconds;
         private ObservableCollection<PlayerViewModel> m_nonPlayingPlayers;
         private ObservableCollection<PlayerViewModel> m_playingPlayers;
         private IHandleTeamSetup m_teamSetupHandler;
 
-        public MatchViewModel(IStopwatchService stopwatchService)
+        public MatchViewModel(IStopwatchService stopwatchService, INavigationService navigationService, IDialogService dialogService)
         {
+            m_navigationService = navigationService;
+            m_dialogService = dialogService;
             StopwatchService = stopwatchService;
             m_playingPlayers = new ObservableCollection<PlayerViewModel>();
             m_nonPlayingPlayers = new ObservableCollection<PlayerViewModel>();
             StartMatchCommand = new Command(StartMatch);
+            StopMatchCommand = new Command(TryStopMatch);
             PauseMatchCommand = new Command(PauseMatch);
             stopwatchService.RegisterInterval(1000, OnEachMatchSecond);
         }
 
-        public IStopwatchService StopwatchService { get; }
-
         private bool ShouldSubstitute => PlayingPlayers.Any(p => p.IsMarkedForSubstitution) && NonPlayingPlayers.Any(p => p.IsMarkedForSubstitution);
+
+        public ICommand StopMatchCommand { get; private set; }
+
+        public IStopwatchService StopwatchService { get; }
 
         public string MatchDuration => TimeSpan.FromSeconds(m_matchDurationSeconds).ToShortForm();
 
@@ -65,16 +74,17 @@ namespace TeamTimer.ViewModels
             var orderedPlayingPlayers = playingPlayers.OrderByDescending(p => p.PlayTimeInSeconds).ToList();
             orderedPlayingPlayers.MoveLockedToEnd();
             PlayingPlayers = new ObservableCollection<PlayerViewModel>(orderedPlayingPlayers);
-            
+
             nonPlayingPlayers.MoveLockedToEnd();
             if (NonPlayingPlayers.Any())
             {
-                NonPlayingPlayers.AddPlayersToExisting(nonPlayingPlayers);    
+                NonPlayingPlayers.AddPlayersToExisting(nonPlayingPlayers);
             }
             else
             {
                 NonPlayingPlayers = new ObservableCollection<PlayerViewModel>(nonPlayingPlayers);
             }
+
             OnPropertyChanged(nameof(NonPlayingPlayers));
             m_teamSetupHandler = teamSetupHandler;
             return Task.CompletedTask;
@@ -123,6 +133,38 @@ namespace TeamTimer.ViewModels
             MarkPlayerForSub(markedPlayer);
         }
 
+        public string Title => "Match";
+        public bool IsBusy { get; set; }
+
+        public void Dispose()
+        {
+            StopwatchService?.Dispose();
+        }
+
+        private void TryStopMatch()
+        {
+            var confirmAction = new DialogAction(
+                "Yes",
+                () =>
+                {
+                    IsMatchStarted = false;
+                    StopwatchService.Pause();
+                    Reset();
+                    m_navigationService.NavigateBack();
+                });
+            m_dialogService.ShowActionSheet("Stop match?", "No", confirmAction);
+        }
+
+        private void Reset()
+        {
+            PlayingPlayers.ForEach(p => p.Reset());
+            NonPlayingPlayers.ForEach(p => p.Reset());
+            PlayingPlayers.Clear();
+            NonPlayingPlayers.Clear();
+            m_matchDurationSeconds = 0;
+            OnPropertyChanged(nameof(MatchDuration));
+        }
+
         private void PauseMatch()
         {
             StopwatchService.Pause();
@@ -139,7 +181,7 @@ namespace TeamTimer.ViewModels
         {
             m_matchDurationSeconds += 1;
             OnPropertyChanged(nameof(MatchDuration));
-            
+
             var tempPlayingPlayers = PlayingPlayers.ToList();
             tempPlayingPlayers.ForEach(p => p.PlayTimeInSeconds += 1);
             PlayingPlayers = new ObservableCollection<PlayerViewModel>(tempPlayingPlayers);
@@ -149,7 +191,7 @@ namespace TeamTimer.ViewModels
         {
             var tempPlayingPlayers = PlayingPlayers.ToList();
             var tempNonPlayingPlayers = NonPlayingPlayers.ToList();
-            
+
             if (tempPlayingPlayers.Contains(markedPlayer))
             {
                 tempPlayingPlayers.DeMarkEveryoneExcept(markedPlayer);
@@ -163,7 +205,7 @@ namespace TeamTimer.ViewModels
 
             PlayingPlayers = new ObservableCollection<PlayerViewModel>(tempPlayingPlayers);
             NonPlayingPlayers = new ObservableCollection<PlayerViewModel>(tempNonPlayingPlayers);
-            
+
             if (ShouldSubstitute)
             {
                 Substitute();
@@ -187,7 +229,7 @@ namespace TeamTimer.ViewModels
 
                 playingPlayerToSub.IsMarkedForSubstitution = false;
                 nonPlayingPlayerToSub.IsMarkedForSubstitution = false;
-                
+
                 playingPlayerToSub.IsPlaying = false;
                 nonPlayingPlayerToSub.IsPlaying = true;
 
@@ -199,14 +241,6 @@ namespace TeamTimer.ViewModels
                 NonPlayingPlayers = new ObservableCollection<PlayerViewModel>(tempNonPlayingPlayers);
                 m_teamSetupHandler?.OnPlayerChanged(playingPlayerToSub);
             }
-        }
-
-        public string Title => "Match";
-        public bool IsBusy { get; set; }
-
-        public void Dispose()
-        {
-            StopwatchService?.Dispose();
         }
     }
 }

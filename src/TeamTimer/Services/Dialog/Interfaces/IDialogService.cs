@@ -20,9 +20,9 @@ namespace TeamTimer.Services.Dialog.Interfaces
         /// </summary>
         /// <param name="title">The title of the action sheet</param>
         /// <param name="cancel">The text in the cancel button</param>
-        /// <param name="destruction">The text in the destruction button, can be left null if it shouldn't be visible</param>
+        /// <param name="confirmAction">The action that should run as the destruction button, can be left null if it shouldn't be visible</param>
         /// <param name="actions">The actions a user can choose amongst, which will run a <see cref="Action"/> </param>
-        Task ShowActionSheet(string title, string cancel, string destruction = null, params DialogAction[] actions);
+        Task ShowActionSheet(string title, string cancel, DialogAction confirmAction = null, params DialogAction[] actions);
 
     }
 }

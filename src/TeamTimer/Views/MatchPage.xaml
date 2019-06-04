@@ -28,6 +28,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0"
                         VerticalOptions="CenterAndExpand"
@@ -47,6 +48,12 @@
                        VerticalOptions="CenterAndExpand"
                        Text="{Binding MatchDuration, StringFormat='Duration : {0}'}"
                        HorizontalOptions="CenterAndExpand" />
+                <Button Grid.Column="2"
+                        VerticalOptions="CenterAndExpand"
+                        Command="{Binding StopMatchCommand}"
+                        Text="Stop match"
+                        Style="{StaticResource ButtonStyle}"
+                        IsVisible="{Binding IsMatchStarted, Converter={Converters:InvertedBoolConverter}}" />
             </Grid>
 
 

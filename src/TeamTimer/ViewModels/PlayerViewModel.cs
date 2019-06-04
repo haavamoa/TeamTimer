@@ -112,5 +112,13 @@ namespace TeamTimer.ViewModels
 
             await m_dialogService.ShowActionSheet($"Options for {Name}", "Cancel", null, actions.ToArray());
         }
+
+        public void Reset()
+        {
+            IsPlaying = false;
+            PlayTimeInSeconds = 0;
+            IsLocked = false;
+            IsMarkedForSubstitution = false;
+        }
     }
 }

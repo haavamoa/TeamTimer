@@ -23,10 +23,10 @@ namespace TeamTimer.Services.Dialog
             return await Application.Current.MainPage.DisplayAlert(title, message, accept, cancel);
         }
 
-        public async Task ShowActionSheet(string title, string cancel, string destruction = null, params DialogAction[] actions)
+        public async Task ShowActionSheet(string title, string cancel, DialogAction confirmAction = null, params DialogAction[] actions)
         {
             var buttons = actions.Select(a => a.ButtonText).ToArray();
-            var buttonPressed = await Application.Current.MainPage.DisplayActionSheet(title, cancel, destruction, buttons);
+            var buttonPressed = await Application.Current.MainPage.DisplayActionSheet(title, cancel, confirmAction?.ButtonText, buttons);
 
             if (buttonPressed == null || buttonPressed.Equals(cancel))
             {
@@ -35,7 +35,15 @@ namespace TeamTimer.Services.Dialog
 
             try
             {
-                actions.Single(a => a.ButtonText.Equals(buttonPressed)).Action.Invoke();
+                if (confirmAction != null && buttonPressed.Equals(confirmAction.ButtonText))
+                {
+                    confirmAction.Action.Invoke();
+                    
+                }
+                else
+                {
+                    actions?.Single(a => a.ButtonText.Equals(buttonPressed)).Action.Invoke();    
+                }
                 m_profilerService.RaiseEvent($"User used {buttonPressed} action from action sheet");
             }
             catch (Exception exception)

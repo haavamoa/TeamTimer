@@ -18,6 +18,7 @@ namespace TeamTimer.ViewModels.Interfaces.ViewModels
         ICommand StartMatchCommand { get; }
         ICommand PauseMatchCommand { get; }
         IStopwatchService StopwatchService { get; }
+        ICommand StopMatchCommand { get; }
         Task Initialize(List<PlayerViewModel> playingPlayers, List<PlayerViewModel> nonPlayingPlayers, IHandleTeamSetup teamSetupHandler);
         void UpdateMatchDuration(int seconds);
     }

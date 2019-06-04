@@ -9,17 +9,24 @@ namespace TeamTimer.Services.Profiling
     {
         public void RaiseEvent(string name)
         {
+#if !DEBUG
             Analytics.TrackEvent(name);
+#endif
         }
 
         public void RaiseError(Exception exception)
         {
+#if !Debug
             Crashes.TrackError(exception);
+
+#endif
         }
 
         public void RaiseError(Exception exception, Dictionary<string, string> properties)
         {
+#if !DEBUG
             Crashes.TrackError(exception, properties);
+#endif
         }
     }
 }

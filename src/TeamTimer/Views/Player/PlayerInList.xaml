@@ -1,11 +1,14 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:Effects="clr-namespace:TeamTimer.Effects;assembly=TeamTimer"
-                    xmlns:Converters="clr-namespace:TeamTimer.Resources.Converters;assembly=TeamTimer" >
+                    xmlns:Converters="clr-namespace:TeamTimer.Resources.Converters;assembly=TeamTimer" 
+                    xmlns:ViewModels="clr-namespace:TeamTimer.ViewModels;assembly=TeamTimer"
+                    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+>
 
 
-    <DataTemplate x:Key="PlayerInListDataTemplate" >
-        <Grid BackgroundColor="{StaticResource NotSelectedListItemColor}" >
+    <DataTemplate x:Key="PlayerInListDataTemplate" x:DataType="ViewModels:PlayerViewModel">
+        <Grid BackgroundColor="{StaticResource NotSelectedListItemColor}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />

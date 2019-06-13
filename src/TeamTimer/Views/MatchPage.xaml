@@ -9,7 +9,8 @@
              Visual="Material"
              Title="{Binding Title}"
              mc:Ignorable="dblend"
-             dblend:DataContext="{dblend:DesignInstance ViewModels:IMatchViewModel}">
+             dblend:DataContext="{dblend:DesignInstance ViewModels:IMatchViewModel}"
+             x:DataType="ViewModels:IMatchViewModel">
     <ContentPage.Resources>
         <ResourceDictionary Source="Player/PlayerCardView.xaml" />
     </ContentPage.Resources>

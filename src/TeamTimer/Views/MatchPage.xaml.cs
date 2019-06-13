@@ -29,8 +29,8 @@ namespace TeamTimer.Views
         {
             base.OnAppearing();
             var deviceWidth = DeviceDisplay.MainDisplayInfo.Width;
-            ((FlowListView)playingPlayers).FlowColumnCount = (int)deviceWidth / 250;
-            ((FlowListView)nonPlayingPlayers).FlowColumnCount = (int)deviceWidth / 250;
+            ((FlowListView)playingPlayers).FlowColumnCount = (int)deviceWidth / 350;
+            ((FlowListView)nonPlayingPlayers).FlowColumnCount = (int)deviceWidth / 350;
         }
     }
 }

@@ -108,6 +108,8 @@ namespace TeamTimer.ViewModels
                 !IsLocked
                 ? new DialogAction("Lock player", () => IsLocked = true)
                 : new DialogAction("Unlock player", () => IsLocked = false)
+                ,
+                new DialogAction("Reset duration", () => PlayTimeInSeconds = 0)
             };
 
             await m_dialogService.ShowActionSheet($"Options for {Name}", "Cancel", null, actions.ToArray());

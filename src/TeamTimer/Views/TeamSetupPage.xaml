@@ -8,7 +8,8 @@
              xmlns:ViewModels="clr-namespace:TeamTimer.ViewModels.Interfaces.ViewModels;assembly=TeamTimer"
              xmlns:Converters="clr-namespace:TeamTimer.Resources.Converters;assembly=TeamTimer"
              Title="{Binding Title}"
-             Visual="Material">
+             Visual="Material"
+             x:DataType="ViewModels:ITeamSetupViewModel">
     <ContentPage.Resources>
         <ResourceDictionary Source="Player/PlayerInList.xaml" />
     </ContentPage.Resources>
